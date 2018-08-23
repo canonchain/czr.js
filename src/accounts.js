@@ -14,6 +14,7 @@ async function createAccount(password) {
     let kdf_salt    = crypto.randomBytes(32);
     let iv          = crypto.randomBytes(16);
     let privateKey  = crypto.randomBytes(32);
+    console.log("私钥",privateKey.toString('hex'));//9e91ac7b6e32aeb68a1aa5eca5cbe24481b412cc129e15a0102d3a6003d2ba0a
 
     //password hashing
     let kdf_option = {
@@ -53,8 +54,33 @@ async function createAccount(password) {
     }
 
 }
-async function decryptAccount(ks, pwd) {
-    return '1533D0D22D09C65110C6C5C1F6A3580C690FB0C444973FE31DC0916EAF2BCC8C'
+async function decryptAccount(keystore, password) {
+    keystore.kdf_salt=Buffer.from(keystore.kdf_salt, "hex");
+    keystore.iv=Buffer.from(keystore.iv, "hex");
+    keystore.ciphertext=Buffer.from(keystore.ciphertext, "hex");
+
+    let kdf_option = {
+        type: argon2.argon2d,
+        timeCost: 1,
+        memoryCost: 16 * 1024,
+        parallelism: 1,
+        hashLength: 32,
+        raw: true,
+        salt: keystore.kdf_salt,
+        version: 0x13
+    };
+
+    //password hashing
+    try {
+        let derive_pwd = await argon2.hash(password.toString(), kdf_option);
+        //从ciphertext解密私钥
+        let decipher = crypto.createDecipheriv("aes-256-ctr", derive_pwd, keystore.iv);
+        let privateKey = Buffer.concat([decipher.update(keystore.ciphertext), decipher.final()]);
+        return privateKey.toString('hex').toUpperCase();
+    } catch (err) {
+        return err;
+    }
+
 }
 
 /* 封装Accounts类 */
@@ -83,6 +109,8 @@ Accounts.prototype.decrypt = function (keystore,password) {
 /*
 * create(pwd)
 * decrypt(kc,pwd)
+* sign(blockHash, prv)
+*
 *
 * */
 module.exports = new Accounts();
