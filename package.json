@@ -1,0 +1,30 @@
+{
+  "name": "czr.js",
+  "version": "0.1.0",
+  "description": "",
+  "main": "src/index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/canonchain/czr.js.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "argon2": "^0.19.3",
+    "base32-encode": "^1.1.0",
+    "blakejs": "^1.1.0",
+    "bs58check": "^2.1.1",
+    "ed25519": "0.0.4"
+  },
+  "bugs": {
+    "url": "https://github.com/canonchain/czr.js/issues"
+  },
+  "homepage": "https://github.com/canonchain/czr.js#readme"
+}
