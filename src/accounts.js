@@ -82,6 +82,20 @@ async function decryptAccount(keystore, password) {
     }
 
 }
+async function signBlock(block,privateKey) {
+    block = Buffer.from(block, "hex");
+    privateKey = Buffer.from(privateKey, "hex");
+
+    let signature = ed25519.Sign(block, privateKey);
+    // console.log("block: " + block.toString('hex').toUpperCase());
+    // console.log("signature: " + signature.toString('hex').toUpperCase());
+    return  signature.toString('hex').toUpperCase();
+}
+async function decryptAndSign(keystore, password,block){
+
+}
+
+
 
 /* 封装Accounts类 */
 let Accounts = function (password) {};
@@ -102,9 +116,32 @@ Accounts.prototype.create = function (password) {
     return createAccount(password)
 };
 
+/*
+* 解密账户私钥
+* parame: keystore pwd
+* return: privateKey
+*
+* */
 Accounts.prototype.decrypt = function (keystore,password) {
     return decryptAccount(keystore,password)
 };
+
+/*
+* 签名
+* parame: block,privateKey
+* return: signature
+* */
+Accounts.prototype.sign = function (block,privateKey) {
+    return signBlock(block,privateKey)
+};
+
+/*
+* 解密和签名
+* */
+Accounts.prototype.decryptAndSign = function (keystore,password,block) {
+    return decryptAccount(keystore,password)
+};
+
 
 /*
 * create(pwd)
