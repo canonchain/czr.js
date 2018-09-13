@@ -1,8 +1,8 @@
 "use strict";
 let version     = require('../package.json').version;
-let utils       = require('./utils');
 let Accounts    = require('./accounts');
 let HttpRequest = require('./httprequest');
+let utils       = require('./utils');
 
 let Czr = function (request) {
     if (request) {
