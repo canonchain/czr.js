@@ -14,7 +14,7 @@ async function createAccount(password) {
     let kdf_salt    = crypto.randomBytes(32);
     let iv          = crypto.randomBytes(16);
     let privateKey  = crypto.randomBytes(32);
-    console.log("私钥",privateKey.toString('hex'));//9e91ac7b6e32aeb68a1aa5eca5cbe24481b412cc129e15a0102d3a6003d2ba0a
+    // console.log("私钥",privateKey.toString('hex'));//9e91ac7b6e32aeb68a1aa5eca5cbe24481b412cc129e15a0102d3a6003d2ba0a
 
     //password hashing
     let kdf_option = {
