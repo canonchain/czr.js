@@ -1,5 +1,6 @@
 "use strict";
-let rpc     = require('node-json-rpc');
+// let rpc     = require('node-json-rpc');
+let rpc     = require('./rpc-main');
 let options = require("./config");
 
 let HttpRequest = function (host, timeout, apiVersion) {
@@ -15,9 +16,11 @@ function asyncfunc(opt) {
     return new Promise((resolve, reject) => {
         client.call(opt,
             function (err, res) {
+
                 if (err) {
                     reject(err);
                 } else {
+
                     resolve(res)
                 }
             }
@@ -270,5 +273,62 @@ HttpRequest.prototype.blockList = async function(account, limit, index) {
     return await asyncfunc(opt);
 };
 
+//传入的mci值,返回mci下所有block的信息
+// {"action":"mci_blocks","mci":"121"} -> {blocks:[]};
+HttpRequest.prototype.mciBlocks = async function(mci) {
+    let opt = {
+        "action": "mci_blocks",
+        "mci": mci
+    };
+    return await asyncfunc(opt);
+};
+
+//当前不稳定的所有block的信息
+//{"action":"unstable_blocks"}-> {blocks:[]};
+HttpRequest.prototype.unstableBlocks = async function() {
+    let opt = {
+        "action": "unstable_blocks"
+    };
+    return await asyncfunc(opt);
+};
+
+//最后一个稳定点的mci，block信息
+/* 
+return
+    {
+        last_stable_mci: 100, 
+        last_mci:122
+    }
+*/
+HttpRequest.prototype.status = async function() {
+    let opt = {
+        "action": "status"
+    };
+    return await asyncfunc(opt);
+};
+
+//导入账号
+/*
+{ success: '0', account: '' }
+//success 0=未成功，1=成功
+* */
+
+HttpRequest.prototype.accountImport = async function(account) {
+    if(!account){
+        return 100
+    }
+    let opt = {
+        "action": "account_import",
+        "json":account
+    };
+    return await asyncfunc(opt);
+};
+
+HttpRequest.prototype.stop = async function() {
+    let opt = {
+        "action": "stop"
+    };
+    return await asyncfunc(opt);
+};
 
 module.exports = HttpRequest;

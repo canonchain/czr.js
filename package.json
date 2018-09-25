@@ -1,7 +1,7 @@
 {
   "name": "czr.js",
-  "version": "0.1.0",
-  "description": "",
+  "version": "0.0.1",
+  "description": "Canonchain JavaScript API",
   "main": "src/index.js",
   "directories": {
     "test": "test"
@@ -13,8 +13,22 @@
     "type": "git",
     "url": "git+https://github.com/canonchain/czr.js.git"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "Canonchain",
+    "czr",
+    "JavaScript",
+    "API"
+  ],
+  "author":  {
+    "name": "canonchain.com"
+  },
+  "authors": [
+    {
+      "name": "anbang",
+      "email": "www@zhubangbang.com",
+      "homepage": "https://github.com/zhubangbang"
+    }
+  ],
   "license": "ISC",
   "dependencies": {
     "argon2": "^0.19.3",
@@ -22,8 +36,7 @@
     "bignumber.js": "^7.2.1",
     "blakejs": "^1.1.0",
     "bs58check": "^2.1.1",
-    "ed25519": "0.0.4",
-    "node-json-rpc": "0.0.1"
+    "ed25519": "0.0.4"
   },
   "bugs": {
     "url": "https://github.com/canonchain/czr.js/issues"
