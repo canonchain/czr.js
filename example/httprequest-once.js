@@ -15,8 +15,7 @@ czr.request.accountList().then(function (res) {
          'czr_1775ww3uwwicwix4fh4sipfd1g37swi8au8imw4p78am19e8fgmm6n7jy7q1' ]
      }
     */
-    console.log(res.accounts.length);//6
 }).catch(function(error){
-    console.log(error.message)
+    console.log(`收到Error`,error.message)
 });
 

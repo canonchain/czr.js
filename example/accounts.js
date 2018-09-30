@@ -1,9 +1,17 @@
 let Czr = require("../src/index.js");
 let czr = new Czr();
 //TODO 创建账号
-czr.accounts.create(2222).then(res => {
-    console.log("创建账号收到结果\n", res);
-    czr.request.accountImport(JSON.stringify(res.account)).then(function (res) {
+czr.accounts.create(123456).then(res => {
+    console.log("创建账号收到结果\n", res);//res.account
+    const file ={"account":"czr_3M3dbuG3hWoeykQroyhJssdS15Bzocyh7wryG75qUWDxoyzBca","kdf_salt":"AF8460A7D28A396C62D6C51620B87789C862ED8783374EEF7B783145F540EB19","iv":"A695DDC35ED9F3183A09FED1E6D92083","ciphertext":"B5F9D332D310B62F497E9490E5591288A0B6904BA2B7F3E63AAC71E5EDFFA7FC"};
+
+
+    console.log("***********************");
+    console.log(`file:${JSON.stringify(file)}`);
+    console.log(`res.account:${JSON.stringify(res)}`);
+    console.log("***********************");
+
+    czr.request.accountImport(JSON.stringify(res)).then(function (res) {
         console.log(`res`,res);
     });
 }).catch(err => {
@@ -11,12 +19,12 @@ czr.accounts.create(2222).then(res => {
 });
 
 
-let keyStore = {
-    account: "czr_3vWdWYrTYVhhrJKoRaYESnUgdJCTLPPB9ZyWrgMDiVh1VbaiBM",
-    kdf_salt: "10EEBA15619E42B95419CDA115DE5DC85141B0E8474DACCADB7DE81874A96C60",
-    iv: "E1EDE18DEBF5DEFEEE94F42FCF81EAF6",
-    ciphertext: "E39941F5638206C3E7BFB5340635C2717AEF1DC1349F61D218ABA65E1C2FECC9"
-};
+// let keyStore = {
+//     "account":"czr_3PNjPuXG5bZ2DXdxh1rB82qL65d4nosYFQGJXRKecxJHEBfNB4",
+//     "kdf_salt":"3188085361BF6CFBA17A76C8F800A77D9B105512217FA18C0D62903637759F9D",
+//     "iv":"E91AFFAAFA59D1EC9D0190E285A23A76",
+//     "ciphertext":"389FE5C5843A42AFEE7140E045986E6A284F097FFEB8F760335905138B150FE6"
+// };
 // czr.request.accountImport(JSON.stringify(keyStore)).then((res)=>{
 //     console.log("res",res);
 // })
@@ -39,4 +47,26 @@ let keyStore = {
 //     }).catch(err=>{
 //         console.log("sign err",err);
 //     })
+// });
+
+//Test
+
+// let testfile ={
+//     "account":"czr_3M3dbuG3hWoeykQroyhJssdS15Bzocyh7wryG75qUWDxoyzBca","kdf_salt":"AF8460A7D28A396C62D6C51620B87789C862ED8783374EEF7B783145F540EB19","iv":"A695DDC35ED9F3183A09FED1E6D92083","ciphertext":"B5F9D332D310B62F497E9490E5591288A0B6904BA2B7F3E63AAC71E5EDFFA7FC"};
+//
+// czr.accounts.decrypt(testfile,123456).then(res=>{
+//     console.log("1.解密账号收到结果============= ",res);
+//     console.log("结果是否相同",res ==="5E844EE4D2E26920F8B0C4B7846929057CFCE48BF40BA269B173648999630053");
+//     return res
+// }).catch(err=>{
+//     console.log("decrypt err",err);
+// }).then(function (privateKey) {
+//     //TODO 签名
+//     // let blockHash='5E844EE4D2E26920F8B0C4B7846929057CFCE48BF40BA269B173648999630053';
+//     // czr.accounts.sign(blockHash,privateKey).then(signature=>{
+//     //     //BBFE4DE008DE19C3178EABBAAF032319DDC493AE5E9174065A0E729945BA47CA9CAC6B6F5A509D8123FB1F4A62AD65D4B68E51A863E4BA7033696A89E1FD9C07
+//     //     console.log("2.signature ",signature)
+//     // }).catch(err=>{
+//     //     console.log("sign err",err);
+//     // })
 // });

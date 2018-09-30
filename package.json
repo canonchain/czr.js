@@ -1,6 +1,6 @@
 {
-  "name": "czr.js",
-  "version": "0.0.1",
+  "name": "czr",
+  "version": "0.0.201",
   "description": "Canonchain JavaScript API",
   "main": "src/index.js",
   "directories": {
