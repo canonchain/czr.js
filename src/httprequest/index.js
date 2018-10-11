@@ -20,7 +20,6 @@ function asyncfunc(opt) {
                 if (err) {
                     reject(err);
                 } else {
-
                     resolve(res)
                 }
             }
@@ -228,6 +227,17 @@ HttpRequest.prototype.getBlock = async function(blockHash) {
     let opt = {
         "action": "block",
         "hash": blockHash
+    };
+    return await asyncfunc(opt);
+};
+
+HttpRequest.prototype.getBlocks = async function(blockHashAry) {
+    if(!blockHashAry){
+        return 0//没有参数
+    }
+    let opt = {
+        "action": "blocks",
+        "hashes": blockHashAry
     };
     return await asyncfunc(opt);
 };
