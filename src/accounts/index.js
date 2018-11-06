@@ -7,7 +7,7 @@ const bs58check = require("bs58check");
 const TEST = true;
 let   COSTNUM;
 if (TEST) {
-    COSTNUM = 8;
+    COSTNUM = 256;
 } else {
     COSTNUM = 16 * 1024;
 }
@@ -19,19 +19,19 @@ function encode_account(pub) {
 }
 
 async function createAccount(password) {
-    let kdf_salt    = crypto.randomBytes(32);
+    let kdf_salt    = crypto.randomBytes(16);
     let iv          = crypto.randomBytes(16);
     let privateKey  = crypto.randomBytes(32);
 
-    /*let kdf_salt    = Buffer.from("AF8460A7D28A396C62D6C51620B87789C862ED8783374EEF7B783145F540EB19", "hex");
+    /*let kdf_salt    = Buffer.from("AF8460A7D28A396C62D6C51620B87789", "hex");
     let iv          = Buffer.from("A695DDC35ED9F3183A09FED1E6D92083", "hex");
     let privateKey  = Buffer.from("5E844EE4D2E26920F8B0C4B7846929057CFCE48BF40BA269B173648999630053", "hex");*/
 
-    // console.log("私钥",privateKey.toString('hex'));//9e91ac7b6e32aeb68a1aa5eca5cbe24481b412cc129e15a0102d3a6003d2ba0a
+    // console.log("私钥",privateKey.toString('hex'));
 
     //password hashing
     let kdf_option = {
-        type: argon2.argon2d,
+        type: argon2.argon2id,
         timeCost: 1,
         memoryCost: COSTNUM,
         parallelism: 1,
@@ -74,7 +74,7 @@ async function decryptAccount(keystore, password) {
     keystore.ciphertext = Buffer.from(keystore.ciphertext, "hex");
 
     let kdf_option = {
-        type: argon2.argon2d,
+        type: argon2.argon2id,
         timeCost: 1,
         memoryCost: COSTNUM,
         parallelism: 1,
@@ -123,9 +123,9 @@ let Accounts = function (password) {
 *
 {
     "account":"czr_3M3dbuG3hWoeykQroyhJssdS15Bzocyh7wryG75qUWDxoyzBca",
-    "kdf_salt":"AF8460A7D28A396C62D6C51620B87789C862ED8783374EEF7B783145F540EB19",
-    "iv":"A695DDC35ED9F3183A09FED1E6D92083",
-    "ciphertext":"1533D0D22D09C65110C6C5C1F6A3580C690FB0C444973FE31DC0916EAF2BCC8C"
+    "kdf_salt":"xxx",
+    "iv":"xxxx",
+    "ciphertext":"xxxx"
 }
 */
 Accounts.prototype.create = function (password) {
