@@ -284,20 +284,55 @@ HttpRequest.prototype.blockList = async function(account, limit, index) {
 };
 
 //传入的mci值,返回mci下所有block的信息
-// {"action":"mci_blocks","mci":"121"} -> {blocks:[]};
-HttpRequest.prototype.mciBlocks = async function(mci) {
+/* 
+{
+    "action"    :"mci_blocks",
+    "mci"       :"121",
+    "limit"     :"50",
+    "next_index":'',    //第一次传空字符串，后续的值取上一次结果中 next_index
+} 
+-> 
+{
+    blocks:[],
+    "next_index": "XXX" // ""或者一串字符串,如果 next_index == ""  这个mci下的block请求结束
+};
+*/
+HttpRequest.prototype.mciBlocks = async function(mci, limit, next_index) { 
+    if(!limit){
+        return 1//没有参数 
+    }
+
     let opt = {
-        "action": "mci_blocks",
-        "mci": mci
+        "action"    :"mci_blocks",
+        "mci"       :mci,
+        "limit"     :limit,
+        "next_index":(next_index ? next_index : ''), //空字符串，后续的值取上一次结果中next_index
     };
     return await asyncfunc(opt);
 };
 
 //当前不稳定的所有block的信息
-//{"action":"unstable_blocks"}-> {blocks:[]};
-HttpRequest.prototype.unstableBlocks = async function() {
+/* 
+{
+    "action"    :"unstable_blocks",
+    "mci"       :"121",
+    "limit"     :"50",
+    "next_index":'',    //第一次传空字符串，后续的值取上一次结果中 next_index
+} 
+-> 
+{
+    blocks:[],
+    "next_index": "XXX" // ""或者一串字符串,如果 next_index == ""  这个mci下的block请求结束
+};
+*/
+HttpRequest.prototype.unstableBlocks = async function(limit, next_index) {
+    if(!limit){
+        return 0//没有参数 
+    }
     let opt = {
-        "action": "unstable_blocks"
+        "action"    : "unstable_blocks",
+        "limit"     :limit,
+        "next_index":(next_index ? next_index : ''), //空字符串，后续的值取上一次结果中next_index
     };
     return await asyncfunc(opt);
 };
