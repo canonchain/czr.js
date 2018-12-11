@@ -8,13 +8,18 @@ let Czr = function (request) {
     // if (request) {
     //     this._request = request;
     // }
+    if(request){
+        this.dev = request.dev ? request.dev : false;
+    }else{
+        this.dev = false;
+    }
     this.request = new HttpRequest(this);
+    this.accounts = new Accounts(this.dev);
 };
 Czr.prototype={
     constructor:Czr,
     version:version,
-    utils:utils,
-    accounts:Accounts
+    utils:utils
 };
 
 module.exports = Czr;

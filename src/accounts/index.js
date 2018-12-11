@@ -4,28 +4,22 @@ const argon2 = require("argon2");
 const ed25519 = require("ed25519");
 const bs58check = require("bs58check");
 
-const TEST = true;
-let   COSTNUM;
-if (TEST) {
-    COSTNUM = 256;
-} else {
-    COSTNUM = 16 * 1024;
-}
-
 function encode_account(pub) {
     let version = Buffer.from([0x01]);
     let v_pub = Buffer.concat([version, pub]);
     return "czr_" + bs58check.encode(v_pub);
 }
 
-async function createAccount(password) {
+async function createAccount(password , COSTNUM) {
     let kdf_salt    = crypto.randomBytes(16);
     let iv          = crypto.randomBytes(16);
     let privateKey  = crypto.randomBytes(32);
 
-    /*let kdf_salt    = Buffer.from("AF8460A7D28A396C62D6C51620B87789", "hex");
-    let iv          = Buffer.from("A695DDC35ED9F3183A09FED1E6D92083", "hex");
-    let privateKey  = Buffer.from("5E844EE4D2E26920F8B0C4B7846929057CFCE48BF40BA269B173648999630053", "hex");*/
+    
+    //测试的
+    // let kdf_salt    = Buffer.from("AF8460A7D28A396C62D6C51620B87789", "hex");
+    // let iv          = Buffer.from("A695DDC35ED9F3183A09FED1E6D92083", "hex");
+    // let privateKey  = Buffer.from("5E844EE4D2E26920F8B0C4B7846929057CFCE48BF40BA269B173648999630053", "hex");
 
     // console.log("私钥",privateKey.toString('hex'));
 
@@ -68,7 +62,7 @@ async function createAccount(password) {
 
 }
 
-async function decryptAccount(keystore, password) {
+async function decryptAccount(keystore, password , COSTNUM) {
     keystore.kdf_salt = Buffer.from(keystore.kdf_salt, "hex");
     keystore.iv = Buffer.from(keystore.iv, "hex");
     keystore.ciphertext = Buffer.from(keystore.ciphertext, "hex");
@@ -113,7 +107,14 @@ async function decryptAndSign(keystore, password, block) {
 
 
 /* 封装Accounts类 */
-let Accounts = function (password) {
+let Accounts = function (dev) {
+    if (dev) {
+        //如果是测试环境
+        this.COSTNUM = 256;
+    } else {
+        this.COSTNUM = 16 * 1024;
+    }
+
 };
 
 /*
@@ -129,7 +130,7 @@ let Accounts = function (password) {
 }
 */
 Accounts.prototype.create = function (password) {
-    return createAccount(password)
+    return createAccount(password,this.COSTNUM);
 };
 
 /*
@@ -139,7 +140,7 @@ Accounts.prototype.create = function (password) {
 *
 * */
 Accounts.prototype.decrypt = function (keystore, password) {
-    return decryptAccount(keystore, password)
+    return decryptAccount(keystore, password, this.COSTNUM)
 };
 
 /*
@@ -155,7 +156,7 @@ Accounts.prototype.sign = function (block, privateKey) {
 * 解密和签名
 * */
 Accounts.prototype.decryptAndSign = function (keystore, password, block) {
-    return decryptAccount(keystore, password)
+    return decryptAccount(keystore, password, this.COSTNUM)
 };
 
 
@@ -166,6 +167,7 @@ Accounts.prototype.decryptAndSign = function (keystore, password, block) {
 *
 *
 * */
-module.exports = new Accounts();
+// module.exports = new Accounts();
+module.exports = Accounts;
 
 
