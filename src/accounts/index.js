@@ -1,7 +1,7 @@
 "use strict";
 const crypto = require("crypto");
-const argon2 = require("argon2");
-const ed25519 = require("ed25519");
+const argon2 = require("../../modules/argon2/argon2");
+const ed25519 = require("../../modules/ed25519/index");
 const bs58check = require("bs58check");
 
 function encode_account(pub) {

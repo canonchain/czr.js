@@ -1,5 +1,6 @@
 let Czr = require("../src/index.js");
-let czr = new Czr({dev:true});
+//let czr = new Czr({dev:true});
+let czr = new Czr();
 //TODO 创建账号
 czr.accounts.create(123456).then(res => {
     console.log("创建账号收到结果\n", res);//res.account
