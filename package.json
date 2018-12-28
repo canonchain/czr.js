@@ -19,7 +19,7 @@
     "JavaScript",
     "API"
   ],
-  "author":  {
+  "author": {
     "name": "canonchain.com"
   },
   "authors": [
@@ -31,10 +31,12 @@
   ],
   "license": "ISC",
   "dependencies": {
+    "argon2": "^0.19.3",
     "base32-encode": "^1.1.0",
     "bignumber.js": "^7.2.1",
     "blakejs": "^1.1.0",
-    "bs58check": "^2.1.1"
+    "bs58check": "^2.1.1",
+    "ed25519": "0.0.4"
   },
   "bugs": {
     "url": "https://github.com/canonchain/czr.js/issues"
