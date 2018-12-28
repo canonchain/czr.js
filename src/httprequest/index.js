@@ -301,13 +301,21 @@ HttpRequest.prototype.mciBlocks = async function(mci, limit, next_index) {
     if(!limit){
         return 1//没有参数 
     }
-
-    let opt = {
-        "action"    :"mci_blocks",
-        "mci"       :mci,
-        "limit"     :limit,
-        "next_index":(next_index ? next_index : ''), //空字符串，后续的值取上一次结果中next_index
-    };
+    let opt ;
+    if(next_index){
+        opt={
+            "action"    :"mci_blocks",
+            "mci"       :mci,
+            "limit"     :limit,
+            "next_index":next_index
+        };
+    }else{
+        opt = {
+            "action"    :"mci_blocks",
+            "mci"       :mci,
+            "limit"     :limit
+        };
+    }
     return await asyncfunc(opt);
 };
 
@@ -329,11 +337,19 @@ HttpRequest.prototype.unstableBlocks = async function(limit, next_index) {
     if(!limit){
         return 0//没有参数 
     }
-    let opt = {
-        "action"    : "unstable_blocks",
-        "limit"     :limit,
-        "next_index":(next_index ? next_index : ''), //空字符串，后续的值取上一次结果中next_index
-    };
+    let opt ;
+    if(next_index){
+        opt={
+            "action"    :"unstable_blocks",
+            "limit"     :limit,
+            "next_index":next_index
+        };
+    }else{
+        opt = {
+            "action"    :"unstable_blocks",
+            "limit"     :limit
+        };
+    }
     return await asyncfunc(opt);
 };
 
