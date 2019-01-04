@@ -140,8 +140,9 @@ var Client = function (options) {
     this.call = function (data, callback, opts) {
         opts = opts || {}
         var body = JSON.stringify(data);
+        let buf = Buffer.from(body, 'utf8');
         var options = buildOptions({
-            length: body.length,
+            length: buf.length,
             method: opts.method || 'POST',
             path: opts.path || conf.path,
 

@@ -213,6 +213,7 @@ HttpRequest.prototype.send = async function(sendObj) {
         "from": sendObj.from,
         "to": sendObj.to,
         "amount": sendObj.amount,
+        "gas": sendObj.gas,
         "password": sendObj.password,
         "data": sendObj.data,
         "id": sendObj.id
