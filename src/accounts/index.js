@@ -10,12 +10,12 @@ function encode_account(pub) {
     return "czr_" + bs58check.encode(v_pub);
 }
 
-async function createAccount(password , COSTNUM) {
-    let kdf_salt    = crypto.randomBytes(16);
-    let iv          = crypto.randomBytes(16);
-    let privateKey  = crypto.randomBytes(32);
+async function createAccount(password, COSTNUM) {
+    let kdf_salt = crypto.randomBytes(16);
+    let iv = crypto.randomBytes(16);
+    let privateKey = crypto.randomBytes(32);
 
-    
+
     //测试的
     // let kdf_salt    = Buffer.from("AF8460A7D28A396C62D6C51620B87789", "hex");
     // let iv          = Buffer.from("A695DDC35ED9F3183A09FED1E6D92083", "hex");
@@ -62,7 +62,7 @@ async function createAccount(password , COSTNUM) {
 
 }
 
-async function decryptAccount(keystore, password , COSTNUM) {
+async function decryptAccount(keystore, password, COSTNUM) {
     keystore.kdf_salt = Buffer.from(keystore.kdf_salt, "hex");
     keystore.iv = Buffer.from(keystore.iv, "hex");
     keystore.ciphertext = Buffer.from(keystore.ciphertext, "hex");
@@ -101,9 +101,21 @@ async function signBlock(block, privateKey) {
     return signature.toString('hex').toUpperCase();
 }
 
+async function validateAccount(keystore, password, COSTNUM) {
+    let prv1 = await decryptAccount(keystore, password, COSTNUM);
+    let keypair = ed25519.MakeKeypair(Buffer.from(prv1, "hex"));
+    let compare = keypair.publicKey;
+    if (encode_account(compare) === keystore.account) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 async function decryptAndSign(keystore, password, block) {
 
 }
+
 
 
 /* 封装Accounts类 */
@@ -130,7 +142,16 @@ let Accounts = function (dev) {
 }
 */
 Accounts.prototype.create = function (password) {
-    return createAccount(password,this.COSTNUM);
+    return createAccount(password, this.COSTNUM);
+};
+
+/*
+* 验证keystore文件
+* parame: keystore pwd
+* return: boolena
+* */
+Accounts.prototype.validate_account = function (key, password) {
+    return validateAccount(key, password, this.COSTNUM);
 };
 
 /*
