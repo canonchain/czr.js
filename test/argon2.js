@@ -1,6 +1,6 @@
 const argon2        = require("argon2");
 const crypto        = require("crypto");
-const ed25519       = require("../module/ed25519/index");
+const ed       = require("ed25519-supercop");
 const bs58check     = require("bs58check");
 
 // let kdf_salt    = crypto.randomBytes(16);
@@ -35,7 +35,7 @@ argon2.hash(password, kdf_option).then(derive_pwd => {
     let ciphertext = Buffer.concat([cipher.update(privateKey), cipher.final()]);
 
     //生成公钥
-    let keypair = ed25519.MakeKeypair(privateKey);
+    let keypair = ed.createKeyPair(privateKey);
     let pub = keypair.publicKey;
 
     const kc = {

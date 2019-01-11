@@ -1,7 +1,7 @@
 "use strict";
 const crypto = require("crypto");
 const argon2 = require("argon2");
-const ed25519 = require("../../module/ed25519/index");
+const ed = require("ed25519-supercop");
 const bs58check = require("bs58check");
 
 function encode_account(pub) {
@@ -42,7 +42,7 @@ async function createAccount(password, COSTNUM) {
         let ciphertext = Buffer.concat([cipher.update(privateKey), cipher.final()]);
 
         //生成公钥
-        let keypair = ed25519.MakeKeypair(privateKey);
+        let keypair = ed.createKeyPair(privateKey);
         let publicKey = keypair.publicKey;
 
         //clear privateKey for security, any better methed?
@@ -95,7 +95,7 @@ async function signBlock(block, privateKey) {
     block = Buffer.from(block, "hex");
     privateKey = Buffer.from(privateKey, "hex");
 
-    let signature = ed25519.Sign(block, privateKey);
+    let signature = ed.sign(block, privateKey);
     // console.log("block: " + block.toString('hex').toUpperCase());
     // console.log("signature: " + signature.toString('hex').toUpperCase());
     return signature.toString('hex').toUpperCase();
@@ -103,7 +103,7 @@ async function signBlock(block, privateKey) {
 
 async function validateAccount(keystore, password, COSTNUM) {
     let prv1 = await decryptAccount(keystore, password, COSTNUM);
-    let keypair = ed25519.MakeKeypair(Buffer.from(prv1, "hex"));
+    let keypair = ed.createKeyPair(Buffer.from(prv1, "hex"));
     let compare = keypair.publicKey;
     if (encode_account(compare) === keystore.account) {
         return true;
