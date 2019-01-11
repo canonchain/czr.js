@@ -1,6 +1,6 @@
 {
   "name": "czr",
-  "version": "0.0.207",
+  "version": "0.0.208",
   "description": "Canonchain JavaScript API",
   "main": "src/index.js",
   "directories": {
@@ -35,8 +35,7 @@
     "base32-encode": "^1.1.0",
     "bignumber.js": "^7.2.1",
     "blakejs": "^1.1.0",
-    "bs58check": "^2.1.1",
-    "ed25519": "0.0.4"
+    "bs58check": "^2.1.1"
   },
   "bugs": {
     "url": "https://github.com/canonchain/czr.js/issues"
