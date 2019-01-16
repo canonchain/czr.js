@@ -41,5 +41,8 @@
   "bugs": {
     "url": "https://github.com/canonchain/czr.js/issues"
   },
-  "homepage": "https://github.com/canonchain/czr.js#readme"
+  "homepage": "https://github.com/canonchain/czr.js#readme",
+  "devDependencies": {
+    "chai": "^4.2.0"
+  }
 }
