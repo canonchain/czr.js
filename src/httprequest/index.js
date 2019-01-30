@@ -1,6 +1,6 @@
 "use strict";
 // let rpc     = require('node-json-rpc');
-let rpc     = require('./rpc-main');
+let rpc = require('./rpc-main');
 let options = require("./config");
 
 let HttpRequest = function (host, timeout, apiVersion) {
@@ -47,96 +47,129 @@ HttpRequest.prototype.client = client;
 
 // Account Start
 
-/* 
-创建账号： account_create(password)
-@parm:
-    password
-@return:
-    {account:""}
-*/
-HttpRequest.prototype.accountCreate = async function(pwd) {
-    if(!pwd){
-        return 100
+/**
+ * 生成账户。enable_control 需要设置true。
+ * @param {string} pwd - 生成账户的密码
+ * @param {number} [gen_next_work] - （可选）是否为生成账户的第一笔交易预生成work值，0：不预生成，1：预生成。默认为1。
+ * @returns {Promise<{code, msg}>}
+ * */
+HttpRequest.prototype.accountCreate = async function (pwd, gen_next_work) {
+    if (!pwd) {
+        return {code: 100, msg: 'no param - pwd'}
+    }
+    if (gen_next_work !== 0) {
+        gen_next_work = 1
     }
     let opt = {
         "action": "account_create",
-        "password":pwd
+        "password": pwd,
+        "gen_next_work": gen_next_work
     };
     return await asyncfunc(opt);
 };
 
-/* 
-删除账号： account_remove (password)
-@parm:
-    account
-    password
-@return:
-    {success:"1"}
-*/
-HttpRequest.prototype.accountRemove = async function(account,pwd) {
-    if(!account){
-        return 100
+/**
+ * 删除账户。enable_control 需要设置true。
+ * @param {string} account - 删除的账户
+ * @param {string} pwd - 密码
+ * @returns {Promise<{code, msg}>}
+ * */
+HttpRequest.prototype.accountRemove = async function (account, pwd) {
+    if (!account) {
+        return {code: 100, msg: 'no param - account'}
     }
-    if(!pwd){
-        return 101
+    if (!pwd) {
+        return {code: 100, msg: 'no param - pwd'}
     }
     let opt = {
         "action": "account_remove",
-        "account":account,
-        "password":pwd
+        "account": account,
+        "password": pwd
     };
     return await asyncfunc(opt);
 };
 
+/**
+ * 解锁账户, enable_control 需要设置true.
+ * @param {string} account - 解锁的账户
+ * @param {string} pwd - 密码
+ * @returns {Promise<{code,msg}>} - `{"code": 0,"msg": "OK"}` for success
+ * */
+HttpRequest.prototype.accountUnlock = async function (account, pwd) {
+    if (!account) {
+        return {code: 100, msg: 'no param - account'}
+    }
+    if (!pwd) {
+        return {code: 100, msg: 'no param - pwd'}
+    }
+    let opt = {
+        "action": "account_unlock",
+        "account": account,
+        "password": pwd
+    };
+    return await asyncfunc(opt);
+}
 
-/*
-导入账号： account_import()
-@parm:
-    json
-@return:
-    {success:"1"}   //如果success为0，account为空 account:""
-*/
-HttpRequest.prototype.accountImport = async function(jsonFile) {
-    if(!jsonFile){
-        return 100
+/**
+ * 锁定账户。enable_control 需要设置true。
+ * @param {string} account - 锁定的账户
+ * @returns {Promise<{code, msg}>} - `{"code": 0,"msg": "OK"}` for success
+ * */
+HttpRequest.prototype.accountLock = async function (account) {
+    if (!account) {
+        return {code: 100, msg: 'no param - account'}
+    }
+    let opt = {
+        "action": "account_lock",
+        "account": account
+    };
+    return await asyncfunc(opt);
+}
+
+/**
+ * 导入账户。enable_control 需要设置true。
+ * @param {string} jsonFile - 导入账户的json
+ * @param {number} [gen_next_work] - （可选）是否为导入账户的第一笔交易预生成work值，0：不预生成，1：预生成。默认为1。
+ * @returns {Promise<{code, msg}>}
+ * */
+HttpRequest.prototype.accountImport = async function (jsonFile, gen_next_work) {
+    if (!jsonFile) {
+        return {code: 100, msg: 'no param - jsonFile'}
+    }
+    if (gen_next_work !== 0) {
+        gen_next_work = 1
     }
     let opt = {
         "action": "account_import",
-        "json":jsonFile
+        "json": jsonFile,
+        "gen_next_work": gen_next_work
     };
     return await asyncfunc(opt);
 };
 
-
-/* 
-导出账号： account_export()
-@parm:
-    account
-@return:
-    {json:""}
-*/
-
-HttpRequest.prototype.accountExport = async function(account) {
-    if(!account){
+/**
+ * 导出账户
+ * @param {string} account - 导出的账户
+ * @returns {Promise<{code, msg, json}>} - json: 导出账户的json
+ * */
+HttpRequest.prototype.accountExport = async function (account) {
+    if (!account) {
         return 100
     }
     let opt = {
         "action": "account_export",
-        "account":account
+        "account": account
     };
     return await asyncfunc(opt);
 };
- 
-/* 
-账号验证： account_validate
-@parm:
-    account
-@return:
-    {valid:"1"} 1->正确 0 不正确
-*/
 
-HttpRequest.prototype.accountValidate = async function(accountVal) {
-    if(!accountVal){
+/**
+ * 验证账户格式是否合法
+ * @param {string} accountVal - 待验证的账户
+ * @returns {Promise<{code, msg, valid}>} - valid：验证结果，0：格式不合法，1：格式合法
+ * */
+HttpRequest.prototype.accountValidate = async function (accountVal) {
+    if (!accountVal) {
         return 0
     }
     let opt = {
@@ -146,29 +179,72 @@ HttpRequest.prototype.accountValidate = async function(accountVal) {
     return await asyncfunc(opt);
 };
 
-/* 
-账号列表： account_list()
-@parm:
-    
-@return:
-     {accounts:[]}
-*/
+/**
+ * 修改密码。enable_control 需要设置true。
+ * @param {string} account - 修改密码的账户
+ * @param {string} oldPwd - 账户原密码
+ * @param {string} newPwd - 账户新密码
+ * @returns {Promise<{code, msg}>}
+ * */
+HttpRequest.prototype.accountChangePwd = async function (account, oldPwd, newPwd) {
+    if (!account || !oldPwd || !newPwd) {
+        return {code: 100, msg: 'no param'}
+    }
+    return await asyncfunc({
+        "action": "account_password_change",
+        "account": account,
+        "old_password": oldPwd,
+        "new_password": newPwd
+    })
+}
 
-HttpRequest.prototype.accountList = async function() {
+/**
+ * 获取当前节点的所有账户。enable_control 需要设置true。
+ * @returns {Promise<{code, msg, accounts}>} - accounts: {string[]} 账户列表
+ * */
+HttpRequest.prototype.accountList = async function () {
     let opt = {
         "action": "account_list"
     };
     return await asyncfunc(opt);
 };
 
+/**
+ * 获取指定账户交易详情。enable_control 需要设置true
+ * @param {string} account - 指定查询账户
+ * @param {number} [limit] - 返回交易上限，如果超过默认1000，默认1000
+ * @param {string} [index] - （可选）当前查询索引，来自返回结果中的next_index，默认为空
+ * @returns {Promise<{code, msg, blocks, next_index}>} - blocks: {Array.<Block>} 交易详情列表, next_index: 查询索引
+ * */
+HttpRequest.prototype.accountBlockList = async function (account, limit, index) {
+    if (!account) {
+        return {code: 100, msg: 'no param - account'}
+    }
+    if (!limit || +limit > 1000) {
+        limit = 1000
+    }
+    if (!index) {
+        index = ''
+    }
+    return await asyncfunc({
+        "action": "account_block_list",
+        "account": account,
+        "limit": limit,
+        "index": index
+    })
+}
+
 // Account End
 
 
-
-//获取账号余额
-HttpRequest.prototype.accountBalance = async function(account) {
-    if(!account){
-        return 0//没有参数
+/**
+ * 获取指定账户余额
+ * @param {string} account - 指定的账户
+ * @returns {Promise<{code, msg, balance}>} - balance：{string} 账户余额
+ * */
+HttpRequest.prototype.accountBalance = async function (account) {
+    if (!account) {
+        return {code: 100, msg: 'no param - account'}
     }
     let opt = {
         "action": "account_balance",
@@ -177,13 +253,14 @@ HttpRequest.prototype.accountBalance = async function(account) {
     return await asyncfunc(opt);
 };
 
-//批量获取账户余额
-HttpRequest.prototype.accountsBalances = async function(accountAry) {
-    if(!accountAry){
-        return 0//没有参数
-    }
-    if(!accountAry){
-        return 1 //格式不正确
+/**
+ * 获取指定多个账户余额
+ * @param {string[]} accountAry - 指定的多个账户
+ * @returns {Promise<{code, msg, balances}>} - balances {Object.<string, string>}
+ * */
+HttpRequest.prototype.accountsBalances = async function (accountAry) {
+    if (!accountAry || accountAry.length === 0) {
+        return {code: 100, msg: 'no param - accountAry'}
     }
     let opt = {
         "action": "accounts_balances",
@@ -191,6 +268,113 @@ HttpRequest.prototype.accountsBalances = async function(accountAry) {
     };
     return await asyncfunc(opt);
 };
+
+/**
+ * 发送交易。enable_control 需要设置true。
+ * @param {object} transaction - 交易对象
+ * @returns {Promise<{code, msg, hash}>}
+ * */
+HttpRequest.prototype.sendBlock = async function (transaction) {
+    if (!transaction || !transaction.from || !transaction.to || !transaction.password) {
+        return {code: 100, msg: `no param - transaction ${JSON.stringify(transaction)}`}
+    }
+    if (!(+transaction.amount >= 0 && +transaction.gas >= 0)) {
+        return {code: 110, msg: `transaction not valid - transaction ${JSON.stringify(transaction)}`}
+    }
+    if (transaction.gen_next_work !== 0) {
+        transaction.gen_next_work = 1
+    }
+    let opt = {
+        "action": "send_block",
+        "from": transaction.from,
+        "to": transaction.to,
+        "amount": transaction.amount,
+        "password": transaction.password,
+        "gas": transaction.gas,
+        "data": transaction.data || '',
+        "id": transaction.id || '',
+        "gen_next_work": transaction.gen_next_work
+    };
+    return await asyncfunc(opt);
+}
+
+/**
+ * 生成未签名的交易，返回交易详情。enable_control 需要设置true。
+ * @param {object} transaction - 交易对象
+ * @returns {Promise<{object}>}
+ * */
+HttpRequest.prototype.generateOfflineBlock = async function (transaction) {
+    if (!transaction || !transaction.from || !transaction.to) {
+        return {code: 100, msg: `no param - transaction ${JSON.stringify(transaction)}`}
+    }
+    if (!(+transaction.amount >= 0 && +transaction.gas >= 0)) {
+        return {code: 110, msg: `transaction not valid - transaction ${JSON.stringify(transaction)}`}
+    }
+    return await asyncfunc({
+        "action": "generate_offline_block",
+        "from": transaction.from,
+        "to": transaction.to,
+        "amount": transaction.amount, //1CZR
+        "gas": transaction.gas,
+        "data": transaction.data || ''
+    });
+}
+
+/**
+ * 发送已签名交易，请求参数来自接口generate_offline_block,返回交易哈希。enable_control 需要设置true。
+ * @param {object} block - object returns from generate_offline_block
+ * @returns {Promise<{code, msg, hash}>} - hash: 交易哈希
+ * */
+HttpRequest.prototype.sendOfflineBlock = async function (block) {
+    if (!block || !block.from || !block.to) {
+        return {code: 100, msg: `no param - block ${JSON.stringify(block)}`}
+    }
+    if (!(+block.amount >= 0 && +block.gas >= 0)) {
+        return {code: 110, msg: `block not valid - block ${JSON.stringify(block)}`}
+    }
+    if (block.gen_next_work !== 0) {
+        block.gen_next_work = 1
+    }
+    return await asyncfunc({
+        "action": "send_offline_block",
+        "from": block.from,
+        "to": block.to,
+        "amount": block.amount,
+        "gas": block.gas,
+        "data": block.data || '',
+        "previous": block.previous,
+        "parents": block.parents,
+        "witness_list_block": block.witness_list_block,
+        "witness_list": block.witness_list,
+        "last_summary": block.last_summary,
+        "last_summary_block": block.last_summary_block,
+        "last_stable_block": block.last_stable_block,
+        "exec_timestamp": block.exec_timestamp,
+        "work": block.work,
+        "signature": block.signature,
+        "id": block.id || '',
+        "gen_next_work": block.gen_next_work
+    })
+}
+
+/**
+ * 签名消息
+ * @param {string} public_key - 签名公钥
+ * @param {string} password - 公钥密码
+ * @param {string} msg - 签名的消息
+ * @returns {Promise<{code, msg, hash}>} - hash: 交易hash
+ * */
+HttpRequest.prototype.signMsg = async function (public_key, password, msg) {
+    if (!public_key || !password || !msg) {
+        return {code: 100, msg: 'no param'}
+    }
+    return await asyncfunc({
+        "action": "sign_msg",
+        "public_key": public_key,
+        "password": password,
+        "msg": msg
+    })
+}
 
 /* 
 发送交易： send()
@@ -204,8 +388,11 @@ HttpRequest.prototype.accountsBalances = async function(accountAry) {
 @return:
      {block:""}
 */
-HttpRequest.prototype.send = async function(sendObj) {
-    if(!sendObj){
+/**
+ * @deprecated
+ * */
+HttpRequest.prototype.send = async function (sendObj) {
+    if (!sendObj) {
         return 0//没有参数
     }
     let opt = {
@@ -221,9 +408,15 @@ HttpRequest.prototype.send = async function(sendObj) {
     return await asyncfunc(opt);
 };
 
-HttpRequest.prototype.getBlock = async function(blockHash) {
-    if(!blockHash){
-        return 0//没有参数
+
+/**
+ * 获取交易详情
+ * @param {string} blockHash - 交易哈希
+ * @returns {Promise<{code, msg, block}>} - block {object}
+ * */
+HttpRequest.prototype.getBlock = async function (blockHash) {
+    if (!blockHash) {
+        return {code: 100, msg: 'no param - blockHash'}
     }
     let opt = {
         "action": "block",
@@ -232,9 +425,14 @@ HttpRequest.prototype.getBlock = async function(blockHash) {
     return await asyncfunc(opt);
 };
 
-HttpRequest.prototype.getBlocks = async function(blockHashAry) {
-    if(!blockHashAry){
-        return 0//没有参数
+/**
+ * 批量获取交易详情
+ * @param {string[]} blockHashAry - 交易哈希列表
+ * @returns {Promise<{code, msg, blocks}>}  - blocks {object[]}
+ * */
+HttpRequest.prototype.getBlocks = async function (blockHashAry) {
+    if (!blockHashAry || blockHashAry.length === 0) {
+        return {code: 100, msg: 'no param - blockHashAry'}
     }
     let opt = {
         "action": "blocks",
@@ -255,21 +453,24 @@ HttpRequest.prototype.getBlocks = async function(blockHashAry) {
         next_inde:""
      }
 * */
-HttpRequest.prototype.blockList = async function(account, limit, index) {
+/**
+ * @deprecated
+ * */
+HttpRequest.prototype.blockList = async function (account, limit, index) {
     let opt;
-    if(!account){
+    if (!account) {
         return 0//没有参数 
     }
-    if(!limit){
+    if (!limit) {
         return 1//没有参数 
     }
-    if(!index){
+    if (!index) {
         opt = {
             "action": "block_list",
             "account": account,
             "limit": limit
         };
-    }else{
+    } else {
         opt = {
             "action": "block_list",
             "account": account,
@@ -285,108 +486,173 @@ HttpRequest.prototype.blockList = async function(account, limit, index) {
 };
 
 //传入的mci值,返回mci下所有block的信息
-/* 
+/*
 {
     "action"    :"mci_blocks",
     "mci"       :"121",
     "limit"     :"50",
     "next_index":'',    //第一次传空字符串，后续的值取上一次结果中 next_index
-} 
--> 
+}
+->
 {
     blocks:[],
     "next_index": "XXX" // ""或者一串字符串,如果 next_index == ""  这个mci下的block请求结束
 };
 */
-HttpRequest.prototype.mciBlocks = async function(mci, limit, next_index) { 
-    if(!limit){
-        return 1//没有参数 
+/**
+ * @deprecated
+ * */
+HttpRequest.prototype.mciBlocks = async function (mci, limit, next_index) {
+    if (!limit) {
+        return 1//没有参数
     }
-    let opt ;
-    if(next_index){
-        opt={
-            "action"    :"mci_blocks",
-            "mci"       :mci,
-            "limit"     :limit,
-            "next_index":next_index
-        };
-    }else{
+    let opt;
+    if (next_index) {
         opt = {
-            "action"    :"mci_blocks",
-            "mci"       :mci,
-            "limit"     :limit
+            "action": "mci_blocks",
+            "mci": mci,
+            "limit": limit,
+            "next_index": next_index
+        };
+    } else {
+        opt = {
+            "action": "mci_blocks",
+            "mci": mci,
+            "limit": limit
         };
     }
     return await asyncfunc(opt);
 };
 
+/**
+ * 获取已稳定的指定mci下的多笔交易。
+ * @param {number} mci - 指定的mci
+ * @param {number} limit - 返回交易上限，如果超过1000，默认1000
+ * @param {string} [index] - （可选）当前查询索引，来自返回结果中next_index，默认为空。
+ * @returns {Promise<{code, msg, blocks, next_index}>}
+ * */
+HttpRequest.prototype.stableBlocks = async function (mci, limit, index) {
+    if (mci < 0) {
+        return {code: 110, msg: `param not valid - mci: ${JSON.stringify(mci)}`}
+    }
+    if (!limit || limit > 1000) {
+        limit = 1000
+    }
+    return await asyncfunc({
+        "action": "stable_blocks",
+        "mci": mci,
+        "limit": limit,
+        "index": index || ''
+    });
+}
+
 //当前不稳定的所有block的信息
-/* 
+/*
 {
     "action"    :"unstable_blocks",
     "mci"       :"121",
     "limit"     :"50",
     "next_index":'',    //第一次传空字符串，后续的值取上一次结果中 next_index
-} 
--> 
+}
+->
 {
     blocks:[],
     "next_index": "XXX" // ""或者一串字符串,如果 next_index == ""  这个mci下的block请求结束
 };
 */
-HttpRequest.prototype.unstableBlocks = async function(limit, next_index) {
-    if(!limit){
-        return 0//没有参数 
+/**
+ * 返回未稳定交易详情。
+ * @param {number} limit - 返回交易上限，如果超过1000，默认1000。
+ * @param {string} [index] - （可选）当前查询索引，来自返回结果中的next_index，默认为空。
+ * @returns {Promise<{code, msg, blocks, next_index}>}
+ * */
+HttpRequest.prototype.unstableBlocks = async function (limit, index) {
+    if (!limit || limit > 1000) {
+        limit = 1000
     }
-    let opt ;
-    if(next_index){
-        opt={
-            "action"    :"unstable_blocks",
-            "limit"     :limit,
-            "next_index":next_index
-        };
-    }else{
-        opt = {
-            "action"    :"unstable_blocks",
-            "limit"     :limit
-        };
-    }
+    let opt = {
+        "action": "unstable_blocks",
+        "limit": limit,
+        "index": index || ''
+    };
     return await asyncfunc(opt);
 };
 
 //最后一个稳定点的mci，block信息
-/* 
+/*
 return
     {
-        last_stable_mci: 100, 
+        last_stable_mci: 100,
         last_mci:122
     }
 */
-HttpRequest.prototype.status = async function() {
+/**
+ * 获取当前节点的最大稳定主链index，最大主链index。
+ * @returns {Promise<{code, msg, last_stable_mci, last_mci}>}
+ * */
+HttpRequest.prototype.status = async function () {
     let opt = {
         "action": "status"
     };
     return await asyncfunc(opt);
 };
 
+/**
+ * 获取见证人列表。
+ * @returns {Promise<{code, msg, witness_list}>}
+ * */
+HttpRequest.prototype.witnessList = async function () {
+    return await asyncfunc({
+        "action": "witness_list"
+    })
+}
+
+/**
+ * 获取指定账户预生成的work。enable_control 需要设置true。
+ * @param {string} account - 指定账户
+ * @returns {Promise<{code, msg, root, work}>}
+ * */
+HttpRequest.prototype.getWork = async function (account) {
+    if (!account) {
+        return {code: 100, msg: 'no param - account'}
+    }
+    return await asyncfunc({
+        "action": "work_get",
+        "account": account
+    })
+}
+
+/**
+ * 获取当前节点后台程序版本号，rpc版本号，数据库版本号。
+ * @returns {Promise<{code, msg, version, rpc_version, store_version}>}
+ * */
+HttpRequest.prototype.version = async function () {
+    return await asyncfunc({
+        "action": "version"
+    })
+}
+
 //导入账号
 /*
 { success: '0', account: '' }
 //success 0=未成功，1=成功
 * */
+// HttpRequest.prototype.accountImport = async function (account) {
+//     if (!account) {
+//         return 100
+//     }
+//     let opt = {
+//         "action": "account_import",
+//         "json": account
+//     };
+//     return await asyncfunc(opt);
+// };
 
-HttpRequest.prototype.accountImport = async function(account) {
-    if(!account){
-        return 100
-    }
-    let opt = {
-        "action": "account_import",
-        "json":account
-    };
-    return await asyncfunc(opt);
-};
-
-HttpRequest.prototype.stop = async function() {
+/**
+ * 停止程序
+ * @returns {Promise<{code, msg}>}
+ * */
+HttpRequest.prototype.stop = async function () {
     let opt = {
         "action": "stop"
     };
