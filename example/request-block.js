@@ -11,7 +11,7 @@ const czr = new Czr()
  * */
 czr.request.version()
     .then(ret => {
-        if (ret.code === '0') {
+        if (ret.code === 0) {
             console.log('request success =>', ret)
         } else {
             console.log('request failed =>', ret)
@@ -24,7 +24,7 @@ czr.request.version()
  * */
 // czr.request.accountList()
 //     .then(ret => {
-//         if (ret.code === '0') {
+//         if (ret.code === 0) {
 //             console.log('request success =>', ret, '\n')
 //         } else {
 //             console.log('request failed =>', ret)
@@ -45,7 +45,7 @@ czr.request.version()
 //     "data": ""
 // })
 //     .then(ret => {
-//         if (ret.code === '0') {
+//         if (ret.code === 0) {
 //             console.log('request success =>', ret)
 //         } else {
 //             console.log('request failed =>', ret)
@@ -64,7 +64,7 @@ czr.request.version()
 //     gas: '0',
 // })
 //     .then(ret => {
-//         if (ret.code === '0') {
+//         if (ret.code === 0) {
 //             console.log('request success =>', ret)
 //         } else {
 //             console.log('request failed =>', ret)
@@ -78,7 +78,7 @@ czr.request.version()
  * */
 // czr.request.signMsg('czr_4M3zGYDwWVkhsoP1FxMiuaKyRtc2wQFUDchbMQCkW2q2UmwroX', '12345678', 'F310B56BABE79E8F6DFDE423EA261132F9901D0394070237307A10FFC2BBB06A')
 //     .then(ret => {
-//         if (ret.code === '0') {
+//         if (ret.code === 0) {
 //             console.log('request success =>', ret)
 //         } else {
 //             console.log('request failed =>', ret)
@@ -105,7 +105,7 @@ czr.request.version()
 //     signature: 'D652E79C1E6A249217803E30BB4988D576A68D5747DC751EB2DC1ED4F54716CF239363B37A4ED92611FDE7256B425B3AF250E51B920AB547D5A6C3636C546D00'
 // })
 //     .then(ret => {
-//         if (ret.code === '0') {
+//         if (ret.code === 0) {
 //             console.log('request success =>', ret)
 //         } else {
 //             console.log('request failed =>', ret)
@@ -119,7 +119,7 @@ czr.request.version()
  * */
 // czr.request.getBlock('DD4673A78E6246F298B95DCC3F73990D8F0CCA252F24EA79BCA2D6FE5611D9E4')
 //     .then(ret => {
-//         if (ret.code === '0') {
+//         if (ret.code === 0) {
 //             console.log('request success =>', ret)
 //         } else {
 //             console.log('request failed =>', ret)
@@ -135,7 +135,7 @@ czr.request.version()
 //     'DD4673A78E6246F298B95DCC3F73990D8F0CCA252F24EA79BCA2D6FE5611D9E4'
 // ])
 //     .then(ret => {
-//         if (ret.code === '0') {
+//         if (ret.code === 0) {
 //             console.log('request success =>', ret)
 //         } else {
 //             console.log('request failed =>', ret)
@@ -146,10 +146,11 @@ czr.request.version()
 /**
  * 获取已稳定的指定mci下的多笔交易
  * stableBlocks
+ * TODO explorer
  * */
 // czr.request.stableBlocks(0)
 //     .then(ret => {
-//         if (ret.code === '0') {
+//         if (ret.code === 0) {
 //             console.log('request success =>', ret)
 //         } else {
 //             console.log('request failed =>', ret)
@@ -160,10 +161,11 @@ czr.request.version()
 /**
  * 返回未稳定交易详情
  * unstableBlocks
+ * TODO explorer
  * */
 // czr.request.unstableBlocks()
 //     .then(ret => {
-//         if (ret.code === '0') {
+//         if (ret.code === 0) {
 //             console.log('request success =>', ret)
 //         } else {
 //             console.log('request failed =>', ret)
@@ -175,15 +177,15 @@ czr.request.version()
  * 获取当前节点的最大稳定主链index，最大主链index。
  * status
  * */
-// czr.request.status()
-//     .then(ret => {
-//         if (ret.code === '0') {
-//             console.log('request success =>', ret)
-//         } else {
-//             console.log('request failed =>', ret)
-//         }
-//     })
-//     .catch(err => console.log)
+czr.request.status()
+    .then(ret => {
+        if (ret.code === 0) {
+            console.log('request success =>', ret)
+        } else {
+            console.log('request failed =>', ret)
+        }
+    })
+    .catch(err => console.log)
 
 /**
  * 获取见证人列表
@@ -191,7 +193,7 @@ czr.request.version()
  * */
 // czr.request.witnessList()
 //     .then(ret => {
-//         if (ret.code === '0') {
+//         if (ret.code === 0) {
 //             console.log('request success =>', ret)
 //         } else {
 //             console.log('request failed =>', ret)
@@ -205,7 +207,7 @@ czr.request.version()
  * */
 // czr.request.getWork('czr_3VUEhUFFG7anjTPwgxDEwZAGnwxYYSrDTmxhiMrfQYmmx5MJX4')
 //     .then(ret => {
-//         if (ret.code === '0') {
+//         if (ret.code === 0) {
 //             console.log('request success =>', ret)
 //         } else {
 //             console.log('request failed =>', ret)
