@@ -270,12 +270,12 @@ HttpRequest.prototype.accountsBalances = async function (accountAry) {
 };
 
 /**
- * 发送交易。enable_control 需要设置true。
+ * 发送交易。 enable_control 需要设置true。
  * @param {object} transaction - 交易对象
  * @returns {Promise<{code, msg, hash}>}
  * */
 HttpRequest.prototype.sendBlock = async function (transaction) {
-    if (!transaction || !transaction.from || !transaction.to || !transaction.password) {
+    if (!transaction || !transaction.from || !transaction.password) {
         return {code: 100, msg: `no param - transaction ${JSON.stringify(transaction)}`}
     }
     if (!(+transaction.amount >= 0 && +transaction.gas >= 0)) {
@@ -287,14 +287,18 @@ HttpRequest.prototype.sendBlock = async function (transaction) {
     let opt = {
         "action": "send_block",
         "from": transaction.from,
-        "to": transaction.to,
         "amount": transaction.amount,
         "password": transaction.password,
         "gas": transaction.gas,
         "data": transaction.data || '',
-        "id": transaction.id || '',
         "gen_next_work": transaction.gen_next_work
     };
+    if(transaction.to){
+        opt.to = transaction.to;
+    }
+    if(transaction.id){
+        opt.id = transaction.id;
+    }
     return await asyncfunc(opt);
 }
 
@@ -326,7 +330,7 @@ HttpRequest.prototype.generateOfflineBlock = async function (transaction) {
  * @returns {Promise<{code, msg, hash}>} - hash: 交易哈希
  * */
 HttpRequest.prototype.sendOfflineBlock = async function (block) {
-    if (!block || !block.from || !block.to) {
+    if (!block || !block.from) {
         return {code: 100, msg: `no param - block ${JSON.stringify(block)}`}
     }
     if (!(+block.amount >= 0 && +block.gas >= 0)) {
@@ -335,10 +339,9 @@ HttpRequest.prototype.sendOfflineBlock = async function (block) {
     if (block.gen_next_work !== 0) {
         block.gen_next_work = 1
     }
-    return await asyncfunc({
+    let opt = {
         "action": "send_offline_block",
         "from": block.from,
-        "to": block.to,
         "amount": block.amount,
         "gas": block.gas,
         "data": block.data || '',
@@ -352,9 +355,15 @@ HttpRequest.prototype.sendOfflineBlock = async function (block) {
         "exec_timestamp": block.exec_timestamp,
         "work": block.work,
         "signature": block.signature,
-        "id": block.id || '',
         "gen_next_work": block.gen_next_work
-    })
+    }
+    if(block.to){
+        opt.to=block.to
+    }
+    if(block.id){
+        opt.id=block.id
+    }
+    return await asyncfunc(opt)
 }
 
 /**
@@ -392,19 +401,24 @@ HttpRequest.prototype.signMsg = async function (public_key, password, msg) {
  * @deprecated
  * */
 HttpRequest.prototype.send = async function (sendObj) {
+    // 这个是老接口；0.9.6r后的节点中作废，改用 send_block
     if (!sendObj) {
         return 0//没有参数
     }
     let opt = {
         "action": "send",
         "from": sendObj.from,
-        "to": sendObj.to,
         "amount": sendObj.amount,
         "gas": sendObj.gas,
         "password": sendObj.password,
-        "data": sendObj.data,
-        "id": sendObj.id
+        "data": sendObj.data || ""
     };
+    if(sendObj.to){
+        opt.to = sendObj.to;
+    }
+    if(sendObj.id){
+        opt.id = sendObj.id;
+    }
     return await asyncfunc(opt);
 };
 
