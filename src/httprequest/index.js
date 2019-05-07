@@ -345,6 +345,7 @@ HttpRequest.prototype.sendOfflineBlock = async function (block) {
         "from": block.from,
         "amount": block.amount,
         "gas": block.gas,
+        "gas_price": block.gas_price,
         "data": block.data || '',
         "previous": block.previous,
         "parents": block.parents,

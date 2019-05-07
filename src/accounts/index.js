@@ -94,8 +94,10 @@ async function decryptAccount(keystore, password, COSTNUM) {
 async function signBlock(block, privateKey) {
     block = Buffer.from(block, "hex");
     privateKey = Buffer.from(privateKey, "hex");
-
-    let signature = ed.sign(block, privateKey);
+    let keypair = ed.createKeyPair(privateKey);
+    // privateKey = Buffer.concat([privateKey, Buffer.alloc(32)])
+    console.log('keypair',keypair)
+    let signature = ed.sign(block, keypair.publicKey, keypair.secretKey);
     // console.log("block: " + block.toString('hex').toUpperCase());
     // console.log("signature: " + signature.toString('hex').toUpperCase());
     return signature.toString('hex').toUpperCase();
@@ -179,6 +181,14 @@ Accounts.prototype.sign = function (block, privateKey) {
 Accounts.prototype.decryptAndSign = function (keystore, password, block) {
     return decryptAccount(keystore, password, this.COSTNUM)
 };
+
+// /**
+//  * 解码账户
+//  * @return publicKey - 账户的公钥
+//  * */
+// Accounts.prototype.decodeAccount = function (account) {
+//     return bs58check.decode(account.substring(4)).slice(1).toString('hex')
+// };
 
 
 /*
