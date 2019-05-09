@@ -55,43 +55,43 @@ let keyStore = {
 
 //Test
 
-// let testfile ={
-//     "account":"czr_3M3dbuG3hWoeykQroyhJssdS15Bzocyh7wryG75qUWDxoyzBca","kdf_salt":"AF8460A7D28A396C62D6C51620B87789C862ED8783374EEF7B783145F540EB19","iv":"A695DDC35ED9F3183A09FED1E6D92083","ciphertext":"B5F9D332D310B62F497E9490E5591288A0B6904BA2B7F3E63AAC71E5EDFFA7FC"};
+let testfile ={
+    "account":"czr_3M3dbuG3hWoeykQroyhJssdS15Bzocyh7wryG75qUWDxoyzBca","kdf_salt":"AF8460A7D28A396C62D6C51620B87789C862ED8783374EEF7B783145F540EB19","iv":"A695DDC35ED9F3183A09FED1E6D92083","ciphertext":"B5F9D332D310B62F497E9490E5591288A0B6904BA2B7F3E63AAC71E5EDFFA7FC"};
 
-// czr.accounts.decrypt(testfile,123456).then(res=>{
-//     console.log("1.解密账号收到结果============= ",res);
-//     console.log("结果是否相同",res ==="5E844EE4D2E26920F8B0C4B7846929057CFCE48BF40BA269B173648999630053");
-//     return res
-// }).catch(err=>{
-//     console.log("decrypt err",err);
-// }).then(function (privateKey) {
-//     //TODO 签名
-//     let blockHash='5E844EE4D2E26920F8B0C4B7846929057CFCE48BF40BA269B173648999630053';
-//     czr.accounts.sign(blockHash,privateKey).then(signature=>{
-//         //BBFE4DE008DE19C3178EABBAAF032319DDC493AE5E9174065A0E729945BA47CA9CAC6B6F5A509D8123FB1F4A62AD65D4B68E51A863E4BA7033696A89E1FD9C07
-//         console.log("2.signature ",signature)
-//     }).catch(err=>{
-//         console.log("sign err",err);
-//     })
-// });
+czr.accounts.decrypt(testfile,123456).then(res=>{
+    console.log("1.解密账号收到结果============= ",res);
+    console.log("结果是否相同",res ==="5E844EE4D2E26920F8B0C4B7846929057CFCE48BF40BA269B173648999630053");
+    return res
+}).catch(err=>{
+    console.log("decrypt err",err);
+}).then(function (privateKey) {
+    //TODO 签名
+    let blockHash='5E844EE4D2E26920F8B0C4B7846929057CFCE48BF40BA269B173648999630053';
+    czr.accounts.sign(blockHash,privateKey).then(signature=>{
+        //BBFE4DE008DE19C3178EABBAAF032319DDC493AE5E9174065A0E729945BA47CA9CAC6B6F5A509D8123FB1F4A62AD65D4B68E51A863E4BA7033696A89E1FD9C07
+        console.log("2.signature ",signature)
+    }).catch(err=>{
+        console.log("sign err",err);
+    })
+});
 
 // console.log('decodeAccount', czr.accounts.decodeAccount(testfile.account))
 
-const account_keystore = {
-    "account": "czr_3pwnMsKt57bvK4R7eP4ZnYCCrZ2rSd9ATYnozLyq7y8n2bGaG4",
-    "ciphertext": "0C91F5769FAD5A2A3901739A2ECAA35C51182AA8A4EFABEF5D04B719822FF8BC",
-    "iv": "21E8B0F3227DAAB5C0B1D59C41361745",
-    "kdf_salt": "3C56C2ED0E388A41005E5937DDCEB857"
-}
+// const account_keystore = {
+//     "account": "czr_3pwnMsKt57bvK4R7eP4ZnYCCrZ2rSd9ATYnozLyq7y8n2bGaG4",
+//     "ciphertext": "0C91F5769FAD5A2A3901739A2ECAA35C51182AA8A4EFABEF5D04B719822FF8BC",
+//     "iv": "21E8B0F3227DAAB5C0B1D59C41361745",
+//     "kdf_salt": "3C56C2ED0E388A41005E5937DDCEB857"
+// }
 
-czr.accounts.decrypt(account_keystore, '1234qwer')
-    .then(privateKey => {
-        console.log('privateKey', privateKey)
-        let blockHash='5E844EE4D2E26920F8B0C4B7846929057CFCE48BF40BA269B173648999630053';
-        czr.accounts.sign(blockHash, czr.accounts.decodeAccount(account_keystore.account), privateKey)
-            .then(signature => {
-                console.log('signature', signature)
-            })
-            .catch(console.log)
-    })
-    .catch(console.log)
+// czr.accounts.decrypt(account_keystore, '1234qwer')
+//     .then(privateKey => {
+//         console.log('privateKey', privateKey)
+//         let blockHash='5E844EE4D2E26920F8B0C4B7846929057CFCE48BF40BA269B173648999630053';
+//         czr.accounts.sign(blockHash, privateKey)
+//             .then(signature => {
+//                 console.log('signature', signature)
+//             })
+//             .catch(console.error)
+//     })
+//     .catch(console.error)

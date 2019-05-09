@@ -7,7 +7,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -36,6 +36,7 @@
     "bignumber.js": "^7.2.1",
     "blakejs": "^1.1.0",
     "bs58check": "^2.1.1",
+    "ed25519": "git+https://github.com/gaoxiangxyz/ed25519.git",
     "ed25519-supercop": "^1.2.0"
   },
   "bugs": {
@@ -43,6 +44,7 @@
   },
   "homepage": "https://github.com/canonchain/czr.js#readme",
   "devDependencies": {
-    "chai": "^4.2.0"
+    "chai": "^4.2.0",
+    "mocha": "^6.1.4"
   }
 }
