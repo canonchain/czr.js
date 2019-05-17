@@ -1,7 +1,8 @@
 "use strict";
 const crypto = require("crypto");
 const argon2 = require("argon2");
-const ed = require("ed25519-supercop");
+// const ed = require("ed25519-supercop");
+const ed25519 = require('ed25519')
 const bs58check = require("bs58check");
 
 function encode_account(pub) {
@@ -42,7 +43,8 @@ async function createAccount(password, COSTNUM) {
         let ciphertext = Buffer.concat([cipher.update(privateKey), cipher.final()]);
 
         //生成公钥
-        let keypair = ed.createKeyPair(privateKey);
+        // let keypair = ed.createKeyPair(privateKey);
+        let keypair = ed25519.MakeKeypair(privateKey);
         let publicKey = keypair.publicKey;
 
         //clear privateKey for security, any better methed?
@@ -57,7 +59,7 @@ async function createAccount(password, COSTNUM) {
         }
 
     } catch (err) {
-        return err;
+        throw err;
     }
 
 }
@@ -86,24 +88,29 @@ async function decryptAccount(keystore, password, COSTNUM) {
         let privateKey = Buffer.concat([decipher.update(keystore.ciphertext), decipher.final()]);
         return privateKey.toString('hex').toUpperCase();
     } catch (err) {
-        return err;
+        throw err;
     }
 
 }
 
-async function signBlock(block, privateKey) {
-    block = Buffer.from(block, "hex");
-    privateKey = Buffer.from(privateKey, "hex");
-
-    let signature = ed.sign(block, privateKey);
-    // console.log("block: " + block.toString('hex').toUpperCase());
-    // console.log("signature: " + signature.toString('hex').toUpperCase());
-    return signature.toString('hex').toUpperCase();
+function signBlock(block, privateKey) {
+    try {
+        block = Buffer.from(block, "hex");
+        privateKey = Buffer.from(privateKey, "hex");
+        // let keypair = ed.createKeyPair(privateKey);
+        // let signature = ed.sign(block, keypair.publicKey, keypair.secretKey);
+        let signature = ed25519.Sign(block, privateKey);
+        // console.log("block: " + block.toString('hex').toUpperCase());
+        // console.log("signature: " + signature.toString('hex').toUpperCase());
+        return signature.toString('hex').toUpperCase();
+    } catch (e) {
+        throw e
+    }
 }
 
 async function validateAccount(keystore, password, COSTNUM) {
     let prv1 = await decryptAccount(keystore, password, COSTNUM);
-    let keypair = ed.createKeyPair(Buffer.from(prv1, "hex"));
+    let keypair = ed25519.MakeKeypair(Buffer.from(prv1, "hex"));
     let compare = keypair.publicKey;
     if (encode_account(compare) === keystore.account) {
         return true;
@@ -115,7 +122,6 @@ async function validateAccount(keystore, password, COSTNUM) {
 async function decryptAndSign(keystore, password, block) {
 
 }
-
 
 
 /* 封装Accounts类 */
@@ -141,6 +147,12 @@ let Accounts = function (dev) {
     "ciphertext":"xxxx"
 }
 */
+
+/**
+ * create account
+ * @param password - account password
+ * @return Promise{accountFile | Error} - accountFile { account, kdf_salt, iv, ciphertext }
+ * */
 Accounts.prototype.create = function (password) {
     return createAccount(password, this.COSTNUM);
 };
@@ -179,6 +191,14 @@ Accounts.prototype.sign = function (block, privateKey) {
 Accounts.prototype.decryptAndSign = function (keystore, password, block) {
     return decryptAccount(keystore, password, this.COSTNUM)
 };
+
+// /**
+//  * 解码账户
+//  * @return publicKey - 账户的公钥
+//  * */
+// Accounts.prototype.decodeAccount = function (account) {
+//     return bs58check.decode(account.substring(4)).slice(1).toString('hex')
+// };
 
 
 /*

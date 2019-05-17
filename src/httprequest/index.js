@@ -319,6 +319,7 @@ HttpRequest.prototype.generateOfflineBlock = async function (transaction) {
         "to": transaction.to,
         "amount": transaction.amount, //1CZR
         "gas": transaction.gas,
+        "gas_price": transaction.gas_price,
         "data": transaction.data || ''
     });
 }
@@ -342,7 +343,9 @@ HttpRequest.prototype.sendOfflineBlock = async function (block) {
         "action": "send_offline_block",
         "from": block.from,
         "amount": block.amount,
+        "hash": block.hash,
         "gas": block.gas,
+        "gas_price": block.gas_price,
         "data": block.data || '',
         "previous": block.previous,
         "parents": block.parents,

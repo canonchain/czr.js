@@ -1,6 +1,7 @@
 const argon2 = require("argon2");
 const crypto = require("crypto");
-const ed = require("ed25519-supercop");
+// const ed = require("ed25519-supercop");
+const ed25519 = require("ed25519");
 const bs58check = require("bs58check");
 
 // let kdf_salt    = crypto.randomBytes(16);
@@ -33,7 +34,8 @@ async function createAccount() {
     let ciphertext = Buffer.concat([cipher.update(privateKey), cipher.final()]);
 
     //生成公钥
-    let keypair = ed.createKeyPair(privateKey);
+    // let keypair = ed.createKeyPair(privateKey);
+    let keypair = ed25519.MakeKeypair(privateKey);
     let pub = keypair.publicKey;
 
     const kc = {
