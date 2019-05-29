@@ -24,14 +24,6 @@ function asyncfunc(opt) {
             }
         );
     })
-    /*client.call(opt,function (err, cal) {
-        console.log(err,cal);
-        if(err){
-            return err;
-        }
-        return cal
-
-    })*/
 }
 
 
@@ -286,9 +278,11 @@ HttpRequest.prototype.sendBlock = async function (transaction) {
     let opt = {
         "action": "send_block",
         "from": transaction.from,
+        "to": "",
         "amount": transaction.amount,
         "password": transaction.password,
         "gas": transaction.gas,
+        "gas_price": transaction.gas_price,
         "data": transaction.data || '',
         "gen_next_work": transaction.gen_next_work
     };
@@ -341,23 +335,20 @@ HttpRequest.prototype.sendOfflineBlock = async function (block) {
     }
     let opt = {
         "action": "send_offline_block",
-        "from": block.from,
-        "amount": block.amount,
         "hash": block.hash,
+        "from": block.from,
+        "to": block.to,
+        "amount": block.amount,
         "gas": block.gas,
         "gas_price": block.gas_price,
         "data": block.data || '',
         "previous": block.previous,
-        "parents": block.parents,
-        "witness_list_block": block.witness_list_block,
-        "witness_list": block.witness_list,
-        "last_summary": block.last_summary,
-        "last_summary_block": block.last_summary_block,
-        "last_stable_block": block.last_stable_block,
+
         "exec_timestamp": block.exec_timestamp,
         "work": block.work,
         "signature": block.signature,
-        "gen_next_work": block.gen_next_work
+        "id": block.id || '',
+        "gen_next_work": block.gen_next_work || ''
     }
     if (block.to) {
         opt.to = block.to
@@ -554,20 +545,13 @@ HttpRequest.prototype.stableBlocks = async function (mci, limit, index) {
     if (!limit || limit > 1000) {
         limit = 1000
     }
-    let opt;
-    if (index === undefined) {
-        opt = {
-            "action": "stable_blocks",
-            "mci": mci,
-            "limit": limit,
-        }
-    } else {
-        opt = {
-            "action": "stable_blocks",
-            "mci": mci,
-            "limit": limit,
-            "index": index
-        }
+    let opt = {
+        "action": "stable_blocks",
+        "mci": mci,
+        "limit": limit,
+    }
+    if (index) {
+        opt.index = index
     }
     return await asyncfunc(opt);
 }
