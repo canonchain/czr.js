@@ -403,6 +403,7 @@ HttpRequest.prototype.send = async function (sendObj) {
         "from": sendObj.from,
         "amount": sendObj.amount,
         "gas": sendObj.gas,
+        "gas_price": sendObj.gas_price,
         "password": sendObj.password,
         "data": sendObj.data || ""
     };

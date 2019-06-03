@@ -3,6 +3,22 @@
   "version": "1.0.1",
   "description": "Canonchain JavaScript API",
   "main": "src/index.js",
+  "apidoc": {
+    "title": "Czr.js Document",
+    "url": "https://github.com/canonchain/czr.js",
+    "name": "Czr.js Document",
+    "version": "0.1.0",
+    "description": "A basic example",
+    "sampleUrl": "",
+    "header": {
+      "title": "My own header title",
+      "filename": "header.md"
+    },
+    "footer": {
+      "title": "My own footer title",
+      "filename": "footer.md"
+    }
+  },
   "directories": {
     "test": "test"
   },
