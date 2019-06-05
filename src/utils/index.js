@@ -21,6 +21,13 @@ let decode = require("./helper/decode");
 let encode = require("./helper/encode");
 // let encode = {};
 
+let encode_account = function (pub) {
+    pub = Buffer.from(pub, "hex");
+    let version = Buffer.from([0x01]);
+    let v_pub = Buffer.concat([version, pub]);
+    return "czr_" + bs58check.encode(v_pub);
+}
+
 let isString = function (obj) {
     return typeof obj === 'string' && obj.constructor === String;
 };
@@ -65,5 +72,6 @@ module.exports = {
     toWei: toWei,
     encode: encode,
     decode: decode,
+    encode_account: encode_account,
     fromWei: fromWei
 };
