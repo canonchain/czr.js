@@ -51,8 +51,11 @@
     "base32-encode": "^1.1.0",
     "bignumber.js": "^7.2.1",
     "blakejs": "^1.1.0",
-    "bs58check": "^2.1.1",
-    "ed25519": "git+https://github.com/gaoxiangxyz/ed25519.git"
+    "bn.js": "^4.11.8",
+    "bs58check": "^2.1.2",
+    "czr-solc": "git+https://github.com/zhubangbang/czr-solc",
+    "ed25519": "git+https://github.com/gaoxiangxyz/ed25519.git",
+    "js-sha3": "^0.8.0"
   },
   "bugs": {
     "url": "https://github.com/canonchain/czr.js/issues"

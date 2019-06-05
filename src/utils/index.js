@@ -16,16 +16,10 @@ let unitMap = {
     'CZR': '1000000000000000000',
 };
 
-let encode = function (str) {
-    //TODO 没有完成
-    let czr_str = Buffer.concat(str);
-    return bs58check.encode(czr_str);
-}
+let decode = require("./helper/decode");
 
-let decode = function (pub) {
-    //TODO 没有完成
-    return bs58check.decode(pub);
-}
+let encode = require("./helper/encode");
+// let encode = {};
 
 let isString = function (obj) {
     return typeof obj === 'string' && obj.constructor === String;

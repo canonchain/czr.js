@@ -1,5 +1,20 @@
-let Czr = require("../../src/index.js");
-let czr = new Czr();
+const utils = require('../../src/utils/index');
+// const decode = require('../../src/utils/helper/decode');
 
-let hex = '00000000000000000000000000000000000000000000000000000000000003E8';
-console.log(`${hex}CZR toWei 结果  => ${czr.utils.encode(hex)}`);
+let parm = {
+    functionName: "constructor",
+    args: ["1000000000000000000000000000", "canonChain", "CZR"]
+};
+let data = utils.encode.parse(parm);
+
+console.log("********************* data **********************");
+console.log(data);
+
+// let callParams = {
+//     to: contractAddress,
+//     functionName: "balanceOf",
+//     args: [contractAddress]
+// }
+// let data2 = utils.encode.parse(callParams);
+// console.log("********************* data **********************");
+// console.log(callParams);
