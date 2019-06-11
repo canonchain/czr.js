@@ -449,6 +449,40 @@ HttpRequest.prototype.getBlocks = async function (blockHashAry) {
     return await asyncfunc(opt);
 };
 
+/**
+ * 获取交易状态详情
+ * @param blockHash
+ * @returns {Promise<{code: number, msg: string}>}
+ * https://github.com/canonchain/canonchain/wiki/JOSN-RPC#block_state
+ */
+HttpRequest.prototype.getBlockState = async function (blockHash) {
+    if (!blockHash) {
+        return { code: 100, msg: 'no param - blockHash' }
+    }
+    let opt = {
+        "action": "block_state",
+        "hash": blockHash
+    };
+    return await asyncfunc(opt);
+};
+
+/**
+ * 批量获取交易状态
+ * @param blockHashAry
+ * @returns {Promise<{code: number, msg: string}>}
+ * https://github.com/canonchain/canonchain/wiki/JOSN-RPC#block_states
+ */
+HttpRequest.prototype.getBlockStates = async function (blockHashAry) {
+    if (!blockHashAry || blockHashAry.length === 0) {
+        return { code: 100, msg: 'no param - blockHashAry' }
+    }
+    let opt = {
+        "action": "block_states",
+        "hashes": blockHashAry
+    };
+    return await asyncfunc(opt);
+};
+
 /*
 获取账号列表： blockList()
 @parm:

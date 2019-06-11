@@ -9,15 +9,15 @@ const czr = new Czr()
 /**
  * version
  * */
-czr.request.version()
-    .then(ret => {
-        if (ret.code === 0) {
-            console.log('request success =>', ret)
-        } else {
-            console.log('request failed =>', ret)
-        }
-    })
-    .catch(err => console.log)
+// czr.request.version()
+//     .then(ret => {
+//         if (ret.code === 0) {
+//             console.log('request success =>', ret)
+//         } else {
+//             console.log('request failed =>', ret)
+//         }
+//     })
+//     .catch(err => console.log)
 
 /**
  * 获取当前节点的所有账户
@@ -177,15 +177,15 @@ czr.request.version()
  * 获取当前节点的最大稳定主链index，最大主链index。
  * status
  * */
-czr.request.status()
-    .then(ret => {
-        if (ret.code === 0) {
-            console.log('request success =>', ret)
-        } else {
-            console.log('request failed =>', ret)
-        }
-    })
-    .catch(err => console.log)
+// czr.request.status()
+//     .then(ret => {
+//         if (ret.code === 0) {
+//             console.log('request success =>', ret)
+//         } else {
+//             console.log('request failed =>', ret)
+//         }
+//     })
+//     .catch(err => console.log)
 
 /**
  * 获取见证人列表
@@ -214,3 +214,29 @@ czr.request.status()
 //         }
 //     })
 //     .catch(err => console.log)
+
+/**
+ * 获取指定交易的状态state
+ */
+// czr.request.getBlockState('1BE9E6B29AD56A2E36851176E5C67A180BA46875F03C5742427D2CD51D81306A')
+//     .then(ret => {
+//         if (ret.code === 0) {
+//             console.log('request success =>', ret)
+//         } else {
+//             console.log('request failed =>', ret)
+//         }
+//     })
+//     .catch(err => console.log)
+
+/**
+ * 批量获取指定交易的状态state
+ */
+czr.request.getBlockStates(['1BE9E6B29AD56A2E36851176E5C67A180BA46875F03C5742427D2CD51D81306A',"484A3C6D08BEA39C5F69B58CC5765253BC449C6A15101A042819768CAD4AE8C0"])
+    .then(ret => {
+        if (ret.code === 0) {
+            console.log('request success =>', ret)
+        } else {
+            console.log('request failed =>', ret)
+        }
+    })
+    .catch(err => console.log)
