@@ -46,7 +46,7 @@ HttpRequest.prototype.client = client;
  * */
 HttpRequest.prototype.accountCreate = async function (pwd, gen_next_work) {
     if (!pwd) {
-        return {code: 100, msg: 'no param - pwd'}
+        return { code: 100, msg: 'no param - pwd' }
     }
     if (gen_next_work !== 0) {
         gen_next_work = 1
@@ -67,10 +67,10 @@ HttpRequest.prototype.accountCreate = async function (pwd, gen_next_work) {
  * */
 HttpRequest.prototype.accountRemove = async function (account, pwd) {
     if (!account) {
-        return {code: 100, msg: 'no param - account'}
+        return { code: 100, msg: 'no param - account' }
     }
     if (!pwd) {
-        return {code: 100, msg: 'no param - pwd'}
+        return { code: 100, msg: 'no param - pwd' }
     }
     let opt = {
         "action": "account_remove",
@@ -88,10 +88,10 @@ HttpRequest.prototype.accountRemove = async function (account, pwd) {
  * */
 HttpRequest.prototype.accountUnlock = async function (account, pwd) {
     if (!account) {
-        return {code: 100, msg: 'no param - account'}
+        return { code: 100, msg: 'no param - account' }
     }
     if (!pwd) {
-        return {code: 100, msg: 'no param - pwd'}
+        return { code: 100, msg: 'no param - pwd' }
     }
     let opt = {
         "action": "account_unlock",
@@ -108,7 +108,7 @@ HttpRequest.prototype.accountUnlock = async function (account, pwd) {
  * */
 HttpRequest.prototype.accountLock = async function (account) {
     if (!account) {
-        return {code: 100, msg: 'no param - account'}
+        return { code: 100, msg: 'no param - account' }
     }
     let opt = {
         "action": "account_lock",
@@ -125,7 +125,7 @@ HttpRequest.prototype.accountLock = async function (account) {
  * */
 HttpRequest.prototype.accountImport = async function (jsonFile, gen_next_work) {
     if (!jsonFile) {
-        return {code: 100, msg: 'no param - jsonFile'}
+        return { code: 100, msg: 'no param - jsonFile' }
     }
     if (gen_next_work !== 0) {
         gen_next_work = 1
@@ -179,7 +179,7 @@ HttpRequest.prototype.accountValidate = async function (accountVal) {
  * */
 HttpRequest.prototype.accountChangePwd = async function (account, oldPwd, newPwd) {
     if (!account || !oldPwd || !newPwd) {
-        return {code: 100, msg: 'no param'}
+        return { code: 100, msg: 'no param' }
     }
     return await asyncfunc({
         "action": "account_password_change",
@@ -209,7 +209,7 @@ HttpRequest.prototype.accountList = async function () {
  * */
 HttpRequest.prototype.accountBlockList = async function (account, limit, index) {
     if (!account) {
-        return {code: 100, msg: 'no param - account'}
+        return { code: 100, msg: 'no param - account' }
     }
     if (!limit || +limit > 1000) {
         limit = 1000
@@ -235,7 +235,7 @@ HttpRequest.prototype.accountBlockList = async function (account, limit, index) 
  * */
 HttpRequest.prototype.accountBalance = async function (account) {
     if (!account) {
-        return {code: 100, msg: 'no param - account'}
+        return { code: 100, msg: 'no param - account' }
     }
     let opt = {
         "action": "account_balance",
@@ -251,7 +251,7 @@ HttpRequest.prototype.accountBalance = async function (account) {
  * */
 HttpRequest.prototype.accountsBalances = async function (accountAry) {
     if (!accountAry || accountAry.length === 0) {
-        return {code: 100, msg: 'no param - accountAry'}
+        return { code: 100, msg: 'no param - accountAry' }
     }
     let opt = {
         "action": "accounts_balances",
@@ -267,10 +267,10 @@ HttpRequest.prototype.accountsBalances = async function (accountAry) {
  * */
 HttpRequest.prototype.sendBlock = async function (transaction) {
     if (!transaction || !transaction.from || !transaction.password) {
-        return {code: 100, msg: `no param - transaction ${JSON.stringify(transaction)}`}
+        return { code: 100, msg: `no param - transaction ${JSON.stringify(transaction)}` }
     }
     if (!(+transaction.amount >= 0 && +transaction.gas >= 0)) {
-        return {code: 110, msg: `transaction not valid - transaction ${JSON.stringify(transaction)}`}
+        return { code: 110, msg: `transaction not valid - transaction ${JSON.stringify(transaction)}` }
     }
     if (transaction.gen_next_work !== 0) {
         transaction.gen_next_work = 1
@@ -302,10 +302,10 @@ HttpRequest.prototype.sendBlock = async function (transaction) {
  * */
 HttpRequest.prototype.generateOfflineBlock = async function (transaction) {
     if (!transaction || !transaction.from || !transaction.to) {
-        return {code: 100, msg: `no param - transaction ${JSON.stringify(transaction)}`}
+        return { code: 100, msg: `no param - transaction ${JSON.stringify(transaction)}` }
     }
     if (!(+transaction.amount >= 0 && +transaction.gas >= 0)) {
-        return {code: 110, msg: `transaction not valid - transaction ${JSON.stringify(transaction)}`}
+        return { code: 110, msg: `transaction not valid - transaction ${JSON.stringify(transaction)}` }
     }
     return await asyncfunc({
         "action": "generate_offline_block",
@@ -325,10 +325,10 @@ HttpRequest.prototype.generateOfflineBlock = async function (transaction) {
  * */
 HttpRequest.prototype.sendOfflineBlock = async function (block) {
     if (!block || !block.from) {
-        return {code: 100, msg: `no param - block ${JSON.stringify(block)}`}
+        return { code: 100, msg: `no param - block ${JSON.stringify(block)}` }
     }
     if (!(+block.amount >= 0 && +block.gas >= 0)) {
-        return {code: 110, msg: `block not valid - block ${JSON.stringify(block)}`}
+        return { code: 110, msg: `block not valid - block ${JSON.stringify(block)}` }
     }
     if (block.gen_next_work !== 0) {
         block.gen_next_work = 1
@@ -368,7 +368,7 @@ HttpRequest.prototype.sendOfflineBlock = async function (block) {
  * */
 HttpRequest.prototype.signMsg = async function (public_key, password, msg) {
     if (!public_key || !password || !msg) {
-        return {code: 100, msg: 'no param'}
+        return { code: 100, msg: 'no param' }
     }
     return await asyncfunc({
         "action": "sign_msg",
@@ -424,7 +424,7 @@ HttpRequest.prototype.send = async function (sendObj) {
  * */
 HttpRequest.prototype.getBlock = async function (blockHash) {
     if (!blockHash) {
-        return {code: 100, msg: 'no param - blockHash'}
+        return { code: 100, msg: 'no param - blockHash' }
     }
     let opt = {
         "action": "block",
@@ -440,7 +440,7 @@ HttpRequest.prototype.getBlock = async function (blockHash) {
  * */
 HttpRequest.prototype.getBlocks = async function (blockHashAry) {
     if (!blockHashAry || blockHashAry.length === 0) {
-        return {code: 100, msg: 'no param - blockHashAry'}
+        return { code: 100, msg: 'no param - blockHashAry' }
     }
     let opt = {
         "action": "blocks",
@@ -457,7 +457,7 @@ HttpRequest.prototype.getBlocks = async function (blockHashAry) {
  */
 HttpRequest.prototype.getBlockState = async function (blockHash) {
     if (!blockHash) {
-        return {code: 100, msg: 'no param - blockHash'}
+        return { code: 100, msg: 'no param - blockHash' }
     }
     let opt = {
         "action": "block_state",
@@ -474,7 +474,7 @@ HttpRequest.prototype.getBlockState = async function (blockHash) {
  */
 HttpRequest.prototype.getBlockStates = async function (blockHashAry) {
     if (!blockHashAry || blockHashAry.length === 0) {
-        return {code: 100, msg: 'no param - blockHashAry'}
+        return { code: 100, msg: 'no param - blockHashAry' }
     }
     let opt = {
         "action": "block_states",
@@ -589,8 +589,8 @@ HttpRequest.prototype.stableBlocks = async function (limit, index) {
             "index": Number(index)
         }
     }
-// console.log("stable_blocks opt");
-// console.log(opt);
+    // console.log("stable_blocks opt");
+    // console.log(opt);
     return await asyncfunc(opt);
 }
 
@@ -670,7 +670,7 @@ HttpRequest.prototype.witnessList = async function () {
  * */
 HttpRequest.prototype.getWork = async function (account) {
     if (!account) {
-        return {code: 100, msg: 'no param - account'}
+        return { code: 100, msg: 'no param - account' }
     }
     return await asyncfunc({
         "action": "work_get",
@@ -721,13 +721,13 @@ HttpRequest.prototype.stop = async function () {
  * */
 HttpRequest.prototype.call = async function (call_obj) {
     if (!call_obj.from) {
-        return {code: 100, msg: 'no param - from'}
+        return { code: 100, msg: 'no param - from' }
     }
     if (!call_obj.to) {
-        return {code: 100, msg: 'no param - to'}
+        return { code: 100, msg: 'no param - to' }
     }
     if (!call_obj.data) {
-        return {code: 100, msg: 'no param - data'}
+        return { code: 100, msg: 'no param - data' }
     }
     let opt = {
         "action": "call",
@@ -755,10 +755,10 @@ HttpRequest.prototype.call = async function (call_obj) {
  * */
 HttpRequest.prototype.estimateGas = async function (call_obj) {
     if (!call_obj.gas) {
-        return {code: 100, msg: 'no param - gas'}
+        return { code: 100, msg: 'no param - gas' }
     }
     if (!call_obj.gas_price) {
-        return {code: 100, msg: 'no param - gas_price'}
+        return { code: 100, msg: 'no param - gas_price' }
     }
     let opt = {
         "action": "estimate_gas",
@@ -772,6 +772,19 @@ HttpRequest.prototype.estimateGas = async function (call_obj) {
     };
     return await asyncfunc(opt);
 };
+
+//获取内部交易
+HttpRequest.prototype.blockTraces = async function (hash) {
+    if (!hash) {
+        return { code: 100, msg: 'no param - hash' }
+    }
+    let opt = {
+        "action": "block_traces",
+        "hash": hash
+    };
+    return await asyncfunc(opt);
+};
+
 // **************************************************************** 合约相关 结束
 
 module.exports = HttpRequest;
