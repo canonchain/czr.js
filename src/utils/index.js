@@ -61,6 +61,11 @@ let fromWei = function (number, unit) {
     return isBigNumber(number) ? returnValue : returnValue.toString(10);
 };
 
+let fromWeiToken = function (number, precision) {
+    let returnValue = toBigNumber(number).dividedBy(precision);
+    return isBigNumber(number) ? returnValue : returnValue.toString(10);
+};
+
 let toWei = function (number, unit) {
     let returnValue = toBigNumber(number).times(getValueOfUnit(unit));
     return isBigNumber(number) ? returnValue : returnValue.toString(10);
@@ -69,9 +74,11 @@ let toWei = function (number, unit) {
 module.exports = {
     toBigNumber: toBigNumber,
     isBigNumber: isBigNumber,
-    toWei: toWei,
+
     encode: encode,
     decode: decode,
     encode_account: encode_account,
-    fromWei: fromWei
+    fromWei: fromWei,
+    fromWeiToken: fromWeiToken,
+    toWei: toWei
 };
