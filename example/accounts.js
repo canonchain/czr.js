@@ -65,6 +65,7 @@ let testfile0 = {
 
 //Test
 
+//下面的 秘钥是 FC3C7A50062AC7088A1A008006A1EAD27DDFA3DF0C3206B906C9E00F0282DD38
 let testfile = {
     "account": "czr_3M3dbuG3hWoeykQroyhJssdS15Bzocyh7wryG75qUWDxoyzBca",
     "kdf_salt": "AF8460A7D28A396C62D6C51620B87789C862ED8783374EEF7B783145F540EB19",
@@ -72,7 +73,7 @@ let testfile = {
     "ciphertext": "B5F9D332D310B62F497E9490E5591288A0B6904BA2B7F3E63AAC71E5EDFFA7FC"
 };
 
-czr.accounts.decrypt(testfile0, 123456).then(res => {
+czr.accounts.decrypt(testfile0, 1232456).then(res => {
     console.log("1.解密账号收到结果============= ", res);
     console.log("结果是否相同", res === "5E844EE4D2E26920F8B0C4B7846929057CFCE48BF40BA269B173648999630053");
     return res

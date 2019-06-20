@@ -177,7 +177,8 @@ Accounts.prototype.decrypt = async function (keystore, password) {
     if (isValidate) {
         return decryptAccount(keystore, password, this.COSTNUM)
     } else {
-        return "";
+        let exception = new Error("Parameter (password)'s value invalid");
+        throw exception;
     }
 };
 
