@@ -172,8 +172,13 @@ Accounts.prototype.validate_account = function (key, password) {
 * return: privateKey
 *
 * */
-Accounts.prototype.decrypt = function (keystore, password) {
-    return decryptAccount(keystore, password, this.COSTNUM)
+Accounts.prototype.decrypt = async function (keystore, password) {
+    let isValidate = await validateAccount(keystore, password, this.COSTNUM);
+    if (isValidate) {
+        return decryptAccount(keystore, password, this.COSTNUM)
+    } else {
+        return "";
+    }
 };
 
 /*
