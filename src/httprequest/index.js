@@ -731,24 +731,16 @@ HttpRequest.prototype.call = async function (call_obj) {
  * @param {string} gas_price - gas价格，单位：10-18CZR/gas，手续费 = 实际使用的gas * gas_price。
  * @returns {Promise<{code, msg}>}
  * */
-HttpRequest.prototype.estimateGas = async function (call_obj) {
-    if (!call_obj.gas) {
-        return { code: 100, msg: 'no param - gas' }
-    }
-    if (!call_obj.gas_price) {
-        return { code: 100, msg: 'no param - gas_price' }
-    }
-    let opt = {
-        "action": "estimate_gas",
-        "from": call_obj.from || "",
-        "to": call_obj.to || "",
-        "amount": call_obj.amount || "",
-        "password": call_obj.password || "",
-        "gas": call_obj.gas,
-        "gas_price": call_obj.gas_price,
-        "data": call_obj.data || ""
-    };
-    return await asyncfunc(opt);
+HttpRequest.prototype.estimateGas = async function (req) {
+    const opt = {action:'estimate_gas'}
+    req.from && (opt.from = req.from)
+    req.to && (opt.to = req.to)
+    req.amount && (opt.amount = req.amount)
+    req.gas && (opt.gas = req.gas)
+    req.gas_price && (opt.gas_price = req.gas_price)
+    req.data && (opt.data = req.data)
+    req.mci && (opt.mci = req.mci)
+    return await asyncfunc(opt)
 };
 // **************************************************************** 合约相关 结束
 
