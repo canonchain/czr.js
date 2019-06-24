@@ -733,7 +733,8 @@ HttpRequest.prototype.call = async function (call_obj) {
         "action": "call",
         "from": call_obj.from,
         "to": call_obj.to,
-        "data": call_obj.data
+        "data": call_obj.data,
+        "mci": call_obj.mci ? call_obj.mci : "latest"
     };
     return await asyncfunc(opt);
 };
