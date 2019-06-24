@@ -731,7 +731,7 @@ HttpRequest.prototype.call = async function (call_obj) {
  * @param {string} gas_price - gas价格，单位：10-18CZR/gas，手续费 = 实际使用的gas * gas_price。
  * @returns {Promise<{code, msg}>}
  * */
-HttpRequest.prototype.estimateGas = async function (req) {
+HttpRequest.prototype.estimateGas = async function (req = {}) {
     const opt = {action:'estimate_gas'}
     req.from && (opt.from = req.from)
     req.to && (opt.to = req.to)
