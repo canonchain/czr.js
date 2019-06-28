@@ -267,7 +267,7 @@ HttpRequest.prototype.accountsBalances = async function (accountAry) {
  */
 HttpRequest.prototype.accountCode = async function (account) {
     if (!account) {
-        return {code: 100, msg: 'no param - accountAry'}
+        return {code: 100, msg: 'no param - account'}
     }
     let opt = {
         "action": "account_code",
