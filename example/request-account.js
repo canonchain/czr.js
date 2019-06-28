@@ -168,3 +168,17 @@ const czr = new Czr()
 //         }
 //     })
 //     .catch(err => console.log)
+
+/**
+ * 返回给定地址的已编译智能合约代码（如果有）
+ * accountCode
+ */
+czr.request.accountCode("czr_2yApC5jCY29eb8kfDE95zj2RRqajma4UQmBnvJdcWNoZZVr1uz")
+    .then(ret => {
+        if (ret.code === 0) {
+            console.log('request success =>', ret)
+        } else {
+            console.log('request failed =>', ret)
+        }
+    })
+    .catch(err => console.log)

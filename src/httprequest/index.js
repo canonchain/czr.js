@@ -261,6 +261,22 @@ HttpRequest.prototype.accountsBalances = async function (accountAry) {
 };
 
 /**
+ * 返回给定地址的已编译智能合约代码（如果有）
+ * @param account
+ * @returns {Promise<{code: number, msg: string}>}
+ */
+HttpRequest.prototype.accountCode = async function (account) {
+    if (!account) {
+        return {code: 100, msg: 'no param - accountAry'}
+    }
+    let opt = {
+        "action": "account_code",
+        "account": account
+    };
+    return await asyncfunc(opt);
+};
+
+/**
  * 发送交易。 enable_control 需要设置true。
  * @param {object} transaction - 交易对象
  * @returns {Promise<{code, msg, hash}>}
