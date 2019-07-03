@@ -323,16 +323,19 @@ HttpRequest.prototype.generateOfflineBlock = async function (transaction) {
     if (!(+transaction.amount >= 0 && +transaction.gas >= 0)) {
         return { code: 110, msg: `transaction not valid - transaction ${JSON.stringify(transaction)}` }
     }
-    return await asyncfunc({
+    let opt = {
         "action": "generate_offline_block",
         "from": transaction.from,
         "to": transaction.to,
         "amount": transaction.amount, //1CZR
         "gas": transaction.gas,
         "gas_price": transaction.gas_price,
-        "previous": transaction.previous || '',
         "data": transaction.data || ''
-    });
+    };
+    if (transaction.previous) {
+        opt.previous = transaction.previous;
+    }
+    return await asyncfunc(opt);
 }
 
 /**
