@@ -4,14 +4,14 @@ let bs58check = require("bs58check");
 let unitMap = {
     'none': '0',
     'None': '0',
-    'wei': '1',
-    'Wei': '1',
-    'kwei': '1000',
-    'Kwei': '1000',
-    'mwei': '1000000',
-    'Mwei': '1000000',
-    'gwei': '1000000000',
-    'Gwei': '1000000000',
+    'king': '1',
+    'King': '1',
+    'kking': '1000',
+    'Kking': '1000',
+    'mking': '1000000',
+    'Mking': '1000000',
+    'gking': '1000000000',
+    'Gking': '1000000000',
     'czr': '1000000000000000000',
     'CZR': '1000000000000000000',
 };
@@ -56,17 +56,17 @@ let getValueOfUnit = function (unit) {
     return new BigNumber(unitValue, 10);
 };
 
-let fromWei = function (number, unit) {
+let fromKing = function (number, unit) {
     let returnValue = toBigNumber(number).dividedBy(getValueOfUnit(unit));
     return isBigNumber(number) ? returnValue : returnValue.toString(10);
 };
 
-let fromWeiToken = function (number, precision) {
+let fromKingToken = function (number, precision) {
     let returnValue = toBigNumber(number).dividedBy(precision);
     return isBigNumber(number) ? returnValue : returnValue.toString(10);
 };
 
-let toWei = function (number, unit) {
+let toKing = function (number, unit) {
     let returnValue = toBigNumber(number).times(getValueOfUnit(unit));
     return isBigNumber(number) ? returnValue : returnValue.toString(10);
 };
@@ -78,7 +78,7 @@ module.exports = {
     encode: encode,
     decode: decode,
     encode_account: encode_account,
-    fromWei: fromWei,
-    fromWeiToken: fromWeiToken,
-    toWei: toWei
+    fromKing: fromKing,
+    fromKingToken: fromKingToken,
+    toKing: toKing
 };

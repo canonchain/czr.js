@@ -267,7 +267,7 @@ HttpRequest.prototype.accountsBalances = async function (accountAry) {
  */
 HttpRequest.prototype.accountCode = async function (account) {
     if (!account) {
-        return {code: 100, msg: 'no param - account'}
+        return { code: 100, msg: 'no param - account' }
     }
     let opt = {
         "action": "account_code",
@@ -330,6 +330,7 @@ HttpRequest.prototype.generateOfflineBlock = async function (transaction) {
         "amount": transaction.amount, //1CZR
         "gas": transaction.gas,
         "gas_price": transaction.gas_price,
+        "previous": transaction.previous || '',
         "data": transaction.data || ''
     });
 }
@@ -771,7 +772,7 @@ HttpRequest.prototype.call = async function (call_obj) {
  * @returns {Promise<{code, msg}>}
  * */
 HttpRequest.prototype.estimateGas = async function (req = {}) {
-    const opt = {action:'estimate_gas'}
+    const opt = { action: 'estimate_gas' }
     req.from && (opt.from = req.from)
     req.to && (opt.to = req.to)
     req.amount && (opt.amount = req.amount)

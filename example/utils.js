@@ -1,11 +1,11 @@
 let Czr = require("../src/index.js");
 let czr = new Czr();
 const czrVal = 2;
-//toWei
-console.log(`${czrVal}CZR toWei 结果  => ${czr.utils.toWei(czrVal, "czr")}`);
+//toKing
+console.log(`${czrVal}CZR toKing 结果  => ${czr.utils.toKing(czrVal, "czr")}`);
 
-//formWei
-console.log(`${czrVal}CZR formWei 结果  => ${czr.utils.fromWei(czrVal, "czr")}`);
+//fromKing
+console.log(`${czrVal}CZR fromKing 结果  => ${czr.utils.fromKing(czrVal, "czr")}`);
 
 //toBigNumber
 const bigVal = czr.utils.toBigNumber(czrVal);
