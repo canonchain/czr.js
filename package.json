@@ -1,6 +1,6 @@
 {
   "name": "czr",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Canonchain JavaScript API",
   "main": "src/index.js",
   "apidoc": {
@@ -47,14 +47,14 @@
   ],
   "license": "ISC",
   "dependencies": {
-    "argon2": "^0.19.3",
+    "argon2-wasm-pro": "^1.0.0",
     "base32-encode": "^1.1.0",
     "bignumber.js": "^7.2.1",
     "blakejs": "^1.1.0",
     "bn.js": "^4.11.8",
     "bs58check": "^2.1.2",
-    "czr-solc": "git+https://github.com/zhubangbang/czr-solc",
-    "ed25519": "git+https://github.com/gaoxiangxyz/ed25519.git",
+    "czr-solc": "^0.5.1",
+    "ed25519-wasm-pro": "^1.0.0",
     "js-sha3": "^0.8.0"
   },
   "bugs": {

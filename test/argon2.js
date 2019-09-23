@@ -1,7 +1,7 @@
-const argon2 = require("argon2");
+const argon2 = require("argon2-wasm-pro");
 const crypto = require("crypto");
-// const ed = require("ed25519-supercop");
-const ed25519 = require("ed25519");
+const edPro = require("ed25519-wasm-pro");
+// const ed25519 = require("ed25519");
 const bs58check = require("bs58check");
 
 // let kdf_salt    = crypto.randomBytes(16);
@@ -9,53 +9,57 @@ const bs58check = require("bs58check");
 // let privateKey  = crypto.randomBytes(32);
 // let password = '12345678';
 
-let kdf_salt = Buffer.from("AF8460A7D28A396C62D6C51620B87789", "hex");
-let password = "123456";
-let iv = Buffer.from("A695DDC35ED9F3183A09FED1E6D92083", "hex");
-let privateKey = Buffer.from("5E844EE4D2E26920F8B0C4B7846929057CFCE48BF40BA269B173648999630053", "hex");
+async function createAccount(opts, iv, privateKey) {
+    opts.pass = opts.pass || '123456';
+    opts.salt = opts.salt || Buffer.from("AF8460A7D28A396C62D6C51620B87789", "hex");;
+    opts.type = opts.type || argon2.ArgonType.Argon2id;
+    opts.time = opts.time || 1;
+    opts.mem = opts.mem || 256;//256   16 * 1024  测试环境是256
+    opts.parallelism = opts.parallelism || 1;
+    opts.hashLen = opts.hashLen || 32;
 
-//password hashing
-let kdf_option = {
-    type: argon2.argon2id,
-    timeCost: 1,
-    memoryCost: 256,//256   16 * 1024  测试环境是256
-    parallelism: 1,
-    hashLength: 32,
-    raw: true,
-    salt: kdf_salt,
-    version: 0x13
-};
-
-async function createAccount() {
-    let derive_pwd = await argon2.hash(password, kdf_option)
-    let derive_pwd_val = derive_pwd.toString('hex').toUpperCase();
+    let derive_pwd = await argon2.hash(opts)
+    let derive_pwd_val = derive_pwd.hashHex.toUpperCase();
     //加密私钥，加密方法aes-256-ctr
-    let cipher = crypto.createCipheriv("aes-256-ctr", derive_pwd, iv);
+    let cipher = crypto.createCipheriv("aes-256-ctr", Buffer.from(derive_pwd.hash.buffer), iv);
     let ciphertext = Buffer.concat([cipher.update(privateKey), cipher.final()]);
 
     //生成公钥
-    // let keypair = ed.createKeyPair(privateKey);
-    let keypair = ed25519.MakeKeypair(privateKey);
-    let pub = keypair.publicKey;
 
-    const kc = {
-        pub: pub,
-        kdf_salt: kdf_salt,
-        iv: iv,
-        ciphertext: ciphertext
-    }
-    let ciphertextVal = kc.ciphertext.toString('hex').toUpperCase();
+    let promise = new Promise(function (resolve, reject) {
+        try {
+            edPro.ready(function () {
+                // let keypair = ed25519.MakeKeypair(privateKey);
+                // let pub = keypair.publicKey;
 
-    let pubVal = kc.pub.toString('hex').toUpperCase();
+                const keys = edPro.createKeyPair(privateKey)
+                // console.log("new ed", Buffer.from(keys.publicKey.buffer))
+                let pub = Buffer.from(keys.publicKey.buffer);
+                const kc = {
+                    pub: pub,
+                    kdf_salt: opts.salt,
+                    iv: iv,
+                    ciphertext: ciphertext
+                }
+                let ciphertextVal = kc.ciphertext.toString('hex').toUpperCase();
 
-    let account_c = encode_account(kc.pub);
+                let pubVal = kc.pub.toString('hex').toUpperCase();
 
-    return {
-        "derive_pwd": derive_pwd_val,
-        "account": account_c,
-        "ciphertext": ciphertextVal,
-        "pub": pubVal
-    }
+                let account_c = encode_account(kc.pub);
+                resolve(
+                    {
+                        "derive_pwd": derive_pwd_val,
+                        "account": account_c,
+                        "ciphertext": ciphertextVal,
+                        "pub": pubVal
+                    }
+                )
+            })
+        } catch (e) {
+            reject(e)
+        }
+    });
+    return promise;
 }
 
 

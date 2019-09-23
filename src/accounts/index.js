@@ -1,8 +1,10 @@
 "use strict";
 const crypto = require("crypto");
-const argon2 = require("argon2");
-// const ed = require("ed25519-supercop");
-const ed25519 = require('ed25519')
+// const argon2 = require("argon2");
+const argon2 = require("argon2-wasm-pro");
+
+const edPro = require("ed25519-wasm-pro");
+
 const bs58check = require("bs58check");
 
 function encode_account(pub) {
@@ -26,38 +28,47 @@ async function createAccount(password, COSTNUM) {
 
     //password hashing
     let kdf_option = {
-        type: argon2.argon2id,
-        timeCost: 1,
-        memoryCost: COSTNUM,
-        parallelism: 1,
-        hashLength: 32,
-        raw: true,
+        pass: password.toString(),
         salt: kdf_salt,
-        version: 0x13
+        type: argon2.ArgonType.Argon2id,
+        time: 1,
+        mem: COSTNUM,
+        parallelism: 1,
+        hashLen: 32,
+
+        // raw: true,
+        // version: 0x13
     };
 
     try {
-        let derivePwd = await argon2.hash(password.toString(), kdf_option);
+        let derivePwd = await argon2.hash(kdf_option);
         //加密私钥
-        let cipher = crypto.createCipheriv("aes-256-ctr", derivePwd, iv);//加密方法aes-256-ctr
+        let cipher = crypto.createCipheriv("aes-256-ctr", Buffer.from(derivePwd.hash.buffer), iv);//加密方法aes-256-ctr
         let ciphertext = Buffer.concat([cipher.update(privateKey), cipher.final()]);
+        let promise = new Promise(function (resolve, reject) {
+            try {
+                // 生成公钥
+                edPro.ready(function () {
+                    const keypair = edPro.createKeyPair(privateKey)
+                    let publicKey = Buffer.from(keypair.publicKey.buffer);
 
-        //生成公钥
-        // let keypair = ed.createKeyPair(privateKey);
-        let keypair = ed25519.MakeKeypair(privateKey);
-        let publicKey = keypair.publicKey;
+                    //clear privateKey for security, any better methed?
+                    crypto.randomFillSync(Buffer.from(derivePwd.hash.buffer));
+                    crypto.randomFillSync(privateKey);
 
-        //clear privateKey for security, any better methed?
-        crypto.randomFillSync(derivePwd);
-        crypto.randomFillSync(privateKey);
-
-        return {
-            account: encode_account(publicKey),
-            kdf_salt: kdf_salt.toString('hex').toUpperCase(),
-            iv: iv.toString('hex').toUpperCase(),
-            ciphertext: ciphertext.toString('hex').toUpperCase()
-        }
-
+                    let accFile = {
+                        account: encode_account(publicKey),
+                        kdf_salt: kdf_salt.toString('hex').toUpperCase(),
+                        iv: iv.toString('hex').toUpperCase(),
+                        ciphertext: ciphertext.toString('hex').toUpperCase()
+                    }
+                    resolve(accFile)
+                })
+            } catch (e) {
+                reject(e)
+            }
+        });
+        return promise;
     } catch (err) {
         throw err;
     }
@@ -70,21 +81,23 @@ async function decryptAccount(keystore, password, COSTNUM) {
     keystore.ciphertext = Buffer.from(keystore.ciphertext, "hex");
 
     let kdf_option = {
-        type: argon2.argon2id,
-        timeCost: 1,
-        memoryCost: COSTNUM,
-        parallelism: 1,
-        hashLength: 32,
-        raw: true,
+        pass: password.toString(),
         salt: keystore.kdf_salt,
-        version: 0x13
+        type: argon2.ArgonType.Argon2id,
+        time: 1,
+        mem: COSTNUM,
+        parallelism: 1,
+        hashLen: 32,
+
+        // raw: true,
+        // version: 0x13
     };
 
     //password hashing
     try {
-        let derive_pwd = await argon2.hash(password.toString(), kdf_option);
+        let derivePwd = await argon2.hash(kdf_option);
         //从ciphertext解密私钥
-        let decipher = crypto.createDecipheriv("aes-256-ctr", derive_pwd, keystore.iv);
+        let decipher = crypto.createDecipheriv("aes-256-ctr", Buffer.from(derivePwd.hash.buffer), keystore.iv);
         let privateKey = Buffer.concat([decipher.update(keystore.ciphertext), decipher.final()]);
         return privateKey.toString('hex').toUpperCase();
     } catch (err) {
@@ -94,29 +107,41 @@ async function decryptAccount(keystore, password, COSTNUM) {
 }
 
 function signBlock(block, privateKey) {
-    try {
-        block = Buffer.from(block, "hex");
-        privateKey = Buffer.from(privateKey, "hex");
-        // let keypair = ed.createKeyPair(privateKey);
-        // let signature = ed.sign(block, keypair.publicKey, keypair.secretKey);
-        let signature = ed25519.Sign(block, privateKey);
-        // console.log("block: " + block.toString('hex').toUpperCase());
-        // console.log("signature: " + signature.toString('hex').toUpperCase());
-        return signature.toString('hex').toUpperCase();
-    } catch (e) {
-        throw e
-    }
+    let promise = new Promise(function (resolve, reject) {
+        try {
+            edPro.ready(function () {
+                block = Buffer.from(block, "hex");
+                privateKey = Buffer.from(privateKey, "hex");
+                const keys = edPro.createKeyPair(privateKey)
+                let signature = edPro.sign(block, keys.publicKey, keys.secretKey)
+                let result = Buffer.from(signature.buffer).toString('hex').toUpperCase();
+                resolve(result);
+            })
+        } catch (e) {
+            reject(e)
+        }
+    });
+    return promise;
 }
 
 async function validateAccount(keystore, password, COSTNUM) {
     let prv1 = await decryptAccount(keystore, password, COSTNUM);
-    let keypair = ed25519.MakeKeypair(Buffer.from(prv1, "hex"));
-    let compare = keypair.publicKey;
-    if (encode_account(compare) === keystore.account) {
-        return true;
-    } else {
-        return false;
-    }
+    let promise = new Promise(function (resolve, reject) {
+        try {
+            edPro.ready(function () {
+                const keypair = edPro.createKeyPair(Buffer.from(prv1, "hex"))
+                let compare = Buffer.from(keypair.publicKey.buffer);
+                if (encode_account(compare) === keystore.account) {
+                    resolve(true);
+                } else {
+                    resolve(false);
+                }
+            })
+        } catch (e) {
+            reject(e)
+        }
+    });
+    return promise;
 }
 
 async function decryptAndSign(keystore, password, block) {
@@ -187,8 +212,9 @@ Accounts.prototype.decrypt = async function (keystore, password) {
 * parame: block,privateKey
 * return: signature
 * */
-Accounts.prototype.sign = function (block, privateKey) {
-    return signBlock(block, privateKey)
+Accounts.prototype.sign = async function (block, privateKey) {
+    return await signBlock(block, privateKey);
+
 };
 
 /*
