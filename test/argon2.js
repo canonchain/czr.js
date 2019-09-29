@@ -12,7 +12,7 @@ const bs58check = require("bs58check");
 async function createAccount(opts, iv, privateKey) {
     opts.pass = opts.pass || '123456';
     opts.salt = opts.salt || Buffer.from("AF8460A7D28A396C62D6C51620B87789", "hex");;
-    opts.type = opts.type || argon2.ArgonType.Argon2id;
+    opts.type = opts.type || argon2.argon2id;
     opts.time = opts.time || 1;
     opts.mem = opts.mem || 256;//256   16 * 1024  测试环境是256
     opts.parallelism = opts.parallelism || 1;

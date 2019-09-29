@@ -30,7 +30,7 @@ async function createAccount(password, COSTNUM) {
     let kdf_option = {
         pass: password.toString(),
         salt: kdf_salt,
-        type: argon2.ArgonType.Argon2id,
+        type: argon2.argon2id,
         time: 1,
         mem: COSTNUM,
         parallelism: 1,
@@ -83,7 +83,7 @@ async function decryptAccount(keystore, password, COSTNUM) {
     let kdf_option = {
         pass: password.toString(),
         salt: keystore.kdf_salt,
-        type: argon2.ArgonType.Argon2id,
+        type: argon2.argon2id,
         time: 1,
         mem: COSTNUM,
         parallelism: 1,
