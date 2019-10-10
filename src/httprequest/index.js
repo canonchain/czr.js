@@ -322,7 +322,7 @@ HttpRequest.prototype.sendBlock = async function (transaction) {
  * @returns {Promise<{object}>}
  * */
 HttpRequest.prototype.generateOfflineBlock = async function (transaction) {
-    if (!transaction || !transaction.from || !transaction.to) {
+    if (!transaction || !transaction.from ) {
         return { code: 100, msg: `no param - transaction ${JSON.stringify(transaction)}` }
     }
     if (!(+transaction.amount >= 0 && +transaction.gas >= 0)) {
@@ -331,7 +331,7 @@ HttpRequest.prototype.generateOfflineBlock = async function (transaction) {
     let opt = {
         "action": "generate_offline_block",
         "from": transaction.from,
-        "to": transaction.to,
+        "to": transaction.to || '',
         "amount": transaction.amount, //1CZR
         "gas": transaction.gas,
         "gas_price": transaction.gas_price,
