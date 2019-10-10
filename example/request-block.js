@@ -76,15 +76,15 @@ const czr = new Czr()
  * 签名消息
  * signMsg
  * */
-// czr.request.signMsg('czr_4M3zGYDwWVkhsoP1FxMiuaKyRtc2wQFUDchbMQCkW2q2UmwroX', '12345678', 'F310B56BABE79E8F6DFDE423EA261132F9901D0394070237307A10FFC2BBB06A')
-//     .then(ret => {
-//         if (ret.code === 0) {
-//             console.log('request success =>', ret)
-//         } else {
-//             console.log('request failed =>', ret)
-//         }
-//     })
-//     .catch(err => console.log)
+czr.request.signMsg('czr_4M3zGYDwWVkhsoP1FxMiuaKyRtc2wQFUDchbMQCkW2q2UmwroX', '12345678', 'F310B56BABE79E8F6DFDE423EA261132F9901D0394070237307A10FFC2BBB06A')
+    .then(ret => {
+        if (ret.code === 0) {
+            console.log('request success =>', ret)
+        } else {
+            console.log('request failed =>', ret)
+        }
+    })
+    .catch(err => console.log)
 
 /**
  * 发送已签名交易
