@@ -41,8 +41,8 @@
   "authors": [
     {
       "name": "anbang",
-      "email": "www@zhubangbang.com",
-      "homepage": "https://github.com/zhubangbang"
+      "email": "79228807@qq.com",
+      "homepage": "https://github.com/anbang"
     }
   ],
   "license": "ISC",
@@ -51,7 +51,6 @@
     "bignumber.js": "^7.2.1",
     "bn.js": "^4.11.8",
     "bs58check": "^2.1.2",
-    "czr-solc": "^0.5.1",
     "ed25519-wasm-pro": "^1.1.0",
     "js-sha3": "^0.8.0"
   },
