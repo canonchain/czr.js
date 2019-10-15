@@ -76,15 +76,15 @@ const czr = new Czr()
  * 签名消息
  * signMsg
  * */
-czr.request.signMsg('czr_4M3zGYDwWVkhsoP1FxMiuaKyRtc2wQFUDchbMQCkW2q2UmwroX', '12345678', 'F310B56BABE79E8F6DFDE423EA261132F9901D0394070237307A10FFC2BBB06A')
-    .then(ret => {
-        if (ret.code === 0) {
-            console.log('request success =>', ret)
-        } else {
-            console.log('request failed =>', ret)
-        }
-    })
-    .catch(err => console.log)
+// czr.request.signMsg('czr_4M3zGYDwWVkhsoP1FxMiuaKyRtc2wQFUDchbMQCkW2q2UmwroX', '12345678', 'F310B56BABE79E8F6DFDE423EA261132F9901D0394070237307A10FFC2BBB06A')
+//     .then(ret => {
+//         if (ret.code === 0) {
+//             console.log('request success =>', ret)
+//         } else {
+//             console.log('request failed =>', ret)
+//         }
+//     })
+//     .catch(err => console.log)
 
 /**
  * 发送已签名交易
@@ -231,12 +231,22 @@ czr.request.signMsg('czr_4M3zGYDwWVkhsoP1FxMiuaKyRtc2wQFUDchbMQCkW2q2UmwroX', '1
 /**
  * 批量获取指定交易的状态state
  */
-czr.request.getBlockStates(['1BE9E6B29AD56A2E36851176E5C67A180BA46875F03C5742427D2CD51D81306A',"484A3C6D08BEA39C5F69B58CC5765253BC449C6A15101A042819768CAD4AE8C0"])
-    .then(ret => {
-        if (ret.code === 0) {
-            console.log('request success =>', ret)
-        } else {
-            console.log('request failed =>', ret)
-        }
-    })
-    .catch(err => console.log)
+// czr.request.getBlockStates(['1BE9E6B29AD56A2E36851176E5C67A180BA46875F03C5742427D2CD51D81306A',"484A3C6D08BEA39C5F69B58CC5765253BC449C6A15101A042819768CAD4AE8C0"])
+//     .then(ret => {
+//         if (ret.code === 0) {
+//             console.log('request success =>', ret)
+//         } else {
+//             console.log('request failed =>', ret)
+//         }
+//     })
+//     .catch(err => console.log)
+
+// czr.request.traceTransaction("E2858A380D6BEDF95385230C71D6A71F3C96AB90942FB97A4D0808BFB9F1A4E3")
+//     .then(ret => {
+//         if (ret.code === 0) {
+//             console.log('request success =>', ret)
+//         } else {
+//             console.log('request failed =>', ret)
+//         }
+//     })
+//     .catch(err => console.log)

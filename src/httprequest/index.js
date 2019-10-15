@@ -804,6 +804,18 @@ HttpRequest.prototype.blockTraces = async function (hash) {
     return await asyncfunc(opt);
 };
 
+//获取debug_trace_transaction信息
+HttpRequest.prototype.traceTransaction = async function (hash) {
+    if (!hash) {
+        return { code: 100, msg: 'no param - hash' }
+    }
+    let opt = {
+        "action": "debug_trace_transaction",
+        "hash": hash
+    };
+    return await asyncfunc(opt);
+};
+
 // **************************************************************** 合约相关 结束
 
 module.exports = HttpRequest;
