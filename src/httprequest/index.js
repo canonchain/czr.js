@@ -745,24 +745,19 @@ HttpRequest.prototype.stop = async function () {
 
  * */
 HttpRequest.prototype.call = async function (call_obj) {
-    //TODO 需要修改
-    console.log(call_obj)
-    if (!call_obj.from) {
-        return { code: 100, msg: 'no param - from' }
-    }
-    if (!call_obj.to) {
-        return { code: 100, msg: 'no param - to' }
-    }
-    if (!call_obj.data) {
-        return { code: 100, msg: 'no param - data' }
-    }
     let opt = {
         "action": "call",
-        "from": call_obj.from || '',
-        "to": call_obj.to,
-        "data": call_obj.data || '',
-        "mci": call_obj.mci ? call_obj.mci : "latest"
+        "to": call_obj.to
     };
+    if (call_obj.from) {
+        opt.from = call_obj.from;
+    }
+    if (call_obj.data) {
+        opt.data = call_obj.data;
+    }
+    if (call_obj.mci) {
+        opt.mci = call_obj.mci;
+    }
     return await asyncfunc(opt);
 };
 
