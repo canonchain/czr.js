@@ -826,6 +826,20 @@ HttpRequest.prototype.logs = async function (opts) {
     return await asyncfunc(opt);
 };
 
+//
+HttpRequest.prototype.debugStorageRangeAt = async function (opts) {
+    let opt = {
+        "action": "debug_storage_range_at",
+        "hash": opts.hash,
+        "account": opts.account,
+        "begin": opts.begin,
+    };
+    if (opts.max_results) {
+        opt.max_results = opts.max_results;
+    }
+    return await asyncfunc(opt);
+};
+
 // **************************************************************** 合约相关 结束
 
 module.exports = HttpRequest;
