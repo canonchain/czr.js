@@ -1,5 +1,7 @@
 let BigNumber = require('bignumber.js').default;
 let bs58check = require("bs58check");
+let Hash = require("./lib/hash");
+
 
 let unitMap = {
     'none': '0',
@@ -71,7 +73,152 @@ let toKing = function (number, unit) {
     return isBigNumber(number) ? returnValue : returnValue.toString(10);
 };
 
+// 判断账户是否合法
+let isAccount = function (act) {
+    if (!act) { return false }
+    return true;
+}
+
+//判断数据类型
+let judge = function (data) {
+    let value = /\[object (\w+)\]/.exec(Object.prototype.toString.call(data));
+    return value ? value[1].toLowerCase() : '';
+}
+
+
+//处理错误
+let _fireError = function (error, emitter, reject, callback) {
+    // add data if given
+    if (judge(error) === 'object' && !(error instanceof Error) && error.data) {
+        if (judge(error.data) === 'object' || judge(error.data) === 'array') {
+            error.data = JSON.stringify(error.data, null, 2);
+        }
+        error = error.message + "\n" + error.data;
+    }
+
+    if (judge(error) === 'string') {
+        error = new Error(error);
+    }
+
+    if (judge(callback) === 'function') {
+        callback(error);
+    }
+    if (judge(reject) === 'function') {
+        if (
+            emitter &&
+            (judge(emitter.listeners) === 'function' && emitter.listeners('error').length) ||
+            (judge(callback) === 'function')
+        ) {
+            emitter.catch(function () { });
+        }
+        setTimeout(function () {
+            reject(error);
+        }, 1);
+    }
+
+    if (emitter && judge(emitter.emit) === 'function') {
+        // emit later, to be able to return emitter
+        setTimeout(function () {
+            emitter.emit('error', error);
+            emitter.removeAllListeners();
+        }, 1);
+    }
+    return emitter;
+};
+
+
+//接口转字符串
+let _jsonInterfaceMethodToString = function (json) {
+    //是对象，并且有json name，并且是函数
+    if (judge(json) === 'object' && json.name && json.name.indexOf('(') !== -1) {
+        return json.name;
+    }
+    return json.name + '(' + _flattenTypes(false, json.inputs).join(',') + ')';
+}
+
+let _flattenTypes = function (includeTuple, puts) {
+    // console.log("entered _flattenTypes. inputs/outputs: " + puts)
+    var types = [];
+
+    puts.forEach(function (param) {
+        if (judge(param.components) === 'object') {
+            if (param.type.substring(0, 5) !== 'tuple') {
+                throw new Error('components found but type is not tuple; report on GitHub');
+            }
+            var suffix = '';
+            var arrayBracket = param.type.indexOf('[');
+            if (arrayBracket >= 0) {
+                suffix = param.type.substring(arrayBracket);
+            }
+            var result = _flattenTypes(includeTuple, param.components);
+            // console.log("result should have things: " + result)
+            if (judge(error.data) === 'array' && includeTuple) {
+                // console.log("include tuple word, and its an array. joining...: " + result.types)
+                types.push('tuple(' + result.join(',') + ')' + suffix);
+            } else if (!includeTuple) {
+                // console.log("don't include tuple, but its an array. joining...: " + result)
+                types.push('(' + result.join(',') + ')' + suffix);
+            } else {
+                // console.log("its a single type within a tuple: " + result.types)
+                types.push('(' + result + ')');
+            }
+        } else {
+            // console.log("its a type and not directly in a tuple: " + param.type)
+            types.push(param.type);
+        }
+    });
+    return types;
+}
+
+const SHA3_NULL_S = '0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470';
+let sha3 = function (value) {
+    if (isBigNumber(value)) {
+        value = value.toString();
+    }
+
+    if (isHexStrict(value) && /^0x/i.test((value).toString())) {
+        value = hexToBytes(value);
+    }
+
+    var returnValue = Hash.keccak256(value); // jshint ignore:line
+
+    if (returnValue === SHA3_NULL_S) {
+        return null;
+    } else {
+        return returnValue;
+    }
+};
+// expose the under the hood keccak256
+sha3._Hash = Hash;
+
+//检查字符串是否为十六进制，前面需要0x
+let isHexStrict = function (hex) {
+    return ((judge(hex) === 'string' || judge(hex) === 'number') && /^(-)?0x[0-9a-f]*$/i.test(hex));
+};
+/**
+ *将十六进制字符串转换为字节数组
+ *注意：从crypto-js实现
+ */
+let hexToBytes = function (hex) {
+    hex = hex.toString(16);
+
+    if (!isHexStrict(hex)) {
+        throw new Error('Given value "' + hex + '" is not a valid hex string.');
+    }
+
+    hex = hex.replace(/^0x/i, '');
+
+    for (var bytes = [], c = 0; c < hex.length; c += 2)
+        bytes.push(parseInt(hex.substr(c, 2), 16));
+    return bytes;
+};
+
+
 module.exports = {
+    isAccount: isAccount,
+    _fireError: _fireError,
+    _jsonInterfaceMethodToString: _jsonInterfaceMethodToString,
+
     toBigNumber: toBigNumber,
     isBigNumber: isBigNumber,
 
@@ -80,5 +227,7 @@ module.exports = {
     encode_account: encode_account,
     fromKing: fromKing,
     fromKingToken: fromKingToken,
-    toKing: toKing
+    toKing: toKing,
+    judge: judge,
+    sha3: sha3
 };

@@ -2,15 +2,14 @@
 // let rpc     = require('node-json-rpc');
 let rpc = require('./rpc-main');
 let options = require("./config");
+let client;
 
 let HttpRequest = function (host, timeout, apiVersion) {
-    this.hostCon = host || options;
+    let hostCon = Object.assign(options, host);
+    client = new rpc.Client(hostCon);
     // this.timeout = timeout || 0;
     // this.apiVersion = apiVersion || "v1";
 };
-
-
-let client = new rpc.Client(options);
 
 function asyncfunc(opt) {
     return new Promise((resolve, reject) => {
@@ -26,8 +25,7 @@ function asyncfunc(opt) {
     })
 }
 
-
-HttpRequest.prototype.client = client;
+// HttpRequest.prototype.client = client;
 /* 
 
         return 100//没有第一个参数
@@ -283,6 +281,7 @@ HttpRequest.prototype.accountCode = async function (account) {
  * @returns {Promise<{code, msg, hash}>}
  * */
 HttpRequest.prototype.sendBlock = async function (transaction) {
+    // console.log("czr.js", transaction)
     if (!transaction || !transaction.from || !transaction.password) {
         return { code: 100, msg: `no param - transaction ${JSON.stringify(transaction)}` }
     }
@@ -296,7 +295,7 @@ HttpRequest.prototype.sendBlock = async function (transaction) {
         "action": "send_block",
         "from": transaction.from,
         "to": "",
-        "amount": transaction.amount,
+        "amount": transaction.amount.toString(),
         "password": transaction.password,
         "gas": transaction.gas,
         "gas_price": transaction.gas_price,
@@ -322,7 +321,7 @@ HttpRequest.prototype.sendBlock = async function (transaction) {
  * @returns {Promise<{object}>}
  * */
 HttpRequest.prototype.generateOfflineBlock = async function (transaction) {
-    if (!transaction || !transaction.from ) {
+    if (!transaction || !transaction.from) {
         return { code: 100, msg: `no param - transaction ${JSON.stringify(transaction)}` }
     }
     if (!(+transaction.amount >= 0 && +transaction.gas >= 0)) {
@@ -746,6 +745,8 @@ HttpRequest.prototype.stop = async function () {
 
  * */
 HttpRequest.prototype.call = async function (call_obj) {
+    //TODO 需要修改
+    console.log(call_obj)
     if (!call_obj.from) {
         return { code: 100, msg: 'no param - from' }
     }
@@ -757,9 +758,9 @@ HttpRequest.prototype.call = async function (call_obj) {
     }
     let opt = {
         "action": "call",
-        "from": call_obj.from,
+        "from": call_obj.from || '',
         "to": call_obj.to,
-        "data": call_obj.data,
+        "data": call_obj.data || '',
         "mci": call_obj.mci ? call_obj.mci : "latest"
     };
     return await asyncfunc(opt);
@@ -813,6 +814,20 @@ HttpRequest.prototype.traceTransaction = async function (hash) {
         "action": "debug_trace_transaction",
         "hash": hash
     };
+    return await asyncfunc(opt);
+};
+
+//获取debug_trace_transaction信息
+HttpRequest.prototype.logs = async function (opts) {
+    let opt = {
+        "action": "logs",
+        "from_stable_block_index": opts.from_stable_block_index || 0,
+        "account": opts.account || '',
+        "topics": opts.topics || ''
+    };
+    if (opts.to_stable_block_index) {
+        opt.to_stable_block_index = opts.to_stable_block_index;
+    }
     return await asyncfunc(opt);
 };
 
