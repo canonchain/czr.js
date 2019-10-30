@@ -105,7 +105,7 @@ let myContract = new czr.Contract(
 
 ---
 
-# 属性
+## 属性
 
 - options
 
@@ -219,7 +219,7 @@ myContract.options.jsonInterface = [...];
 
 ---
 
-# 方法
+## 方法
 
 - clone
 - deploy
