@@ -1,29 +1,5 @@
 # 合约
 
----
-
-- 使用
-  - [约定](#约定)
-  - [new Contract](#new-contract)
-- 属性
-
-  - [options](#options)
-
-    - [options.account](#optionsaccount)
-    - [options.jsonInterface](#optionsjsonInterface)
-
-  - [methods](#methods-属性)
-
-- 方法
-  - [clone()](#clone)
-  - [deploy()](#deploy)
-  - [methods.myMethod()](#methods)
-    - [methods.myMethod.call()](#methodsmyMethodcall)
-    - [methods.myMethod.sendBlock()](#methodsmyMethodsendBlock)
-    - [methods.myMethod.encodeABI()](#methodsmyMethodencodeABI)
-
----
-
 ## 使用
 
 `Contract`对象可以让开发者更容易的与`Canonchain`节点进行智能合约交互；
@@ -52,7 +28,7 @@ json 接口格式如下：
 ]
 ```
 
-[返回文档目录](#合约文档)
+
 
 ### 约定
 
@@ -61,7 +37,7 @@ json 接口格式如下：
 
 ---
 
-[返回文档目录](#合约文档)
+
 
 ## new contract
 
@@ -101,7 +77,7 @@ let myContract = new czr.Contract(
 );
 ```
 
-[返回文档目录](#合约文档)
+
 
 ---
 
@@ -151,7 +127,7 @@ myContract.options.gas_price = '2000000000';
 myContract.options.gas = 5000000;
 ```
 
-[返回文档目录](#合约文档)
+
 
 ---
 
@@ -174,7 +150,7 @@ myContract.options.account;
 myContract.options.account = 'czr_contract_address';
 ```
 
-[返回文档目录](#合约文档)
+
 
 ---
 
@@ -205,7 +181,7 @@ myContract.options.jsonInterface;
 myContract.options.jsonInterface = [...];
 ```
 
-[返回文档目录](#合约文档)
+
 
 ---
 
@@ -215,7 +191,7 @@ myContract.options.jsonInterface = [...];
 
 每个方法会创建一个事务对象，可以`call` `sendBlock` `encodeABI`
 
-[返回文档目录](#合约文档)
+
 
 ---
 
@@ -256,7 +232,7 @@ contract2.options.account = account2;
 > true
 ```
 
-[返回文档目录](#合约文档)
+
 
 ---
 
@@ -340,7 +316,7 @@ myContract.deploy({
 
 ```
 
-[返回文档目录](#合约文档)
+
 
 ---
 
@@ -371,7 +347,7 @@ Object：事务对象：
 - `sendBlock` \<Function> ：降事务发送到链上(改变智能合约状态)！
 - `encodeABI` \<Function> ：为此方法编码 ABI
 
-[返回文档目录](#合约文档)
+
 
 ---
 
@@ -406,7 +382,7 @@ myContract.methods.testCall1().call(function(error, result){
 })
 ```
 
-[返回文档目录](#合约文档)
+
 
 ---
 
@@ -445,7 +421,7 @@ myContract.methods.myMethod(123).sendBlock({from: 'czr_account'}, function(error
 
 ```
 
-[返回文档目录](#合约文档)
+
 
 ---
 
@@ -469,6 +445,6 @@ console.log(encodeABIData);
 //'0x58cf5f1000000000000000000000000000000000000000000000000000000000000007B'
 ```
 
-[返回文档目录](#合约文档)
+
 
 ---

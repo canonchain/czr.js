@@ -1,34 +1,5 @@
 # RPC请求
 
-- [accountBalance](#accountBalance)
-- [accountBlockList](#accountBlockList)
-- [accountChangePwd](#accountChangePwd)
-- [accountCode](#accountCode)
-- [accountCreate](#accountCreate)
-- [accountExport](#accountExport)
-- [accountImport](#accountImport)
-- [accountList](#accountList)
-- [accountLock](#accountLock)
-- [accountRemove](#accountRemove)
-- [accountUnlock](#accountUnlock)
-- [accountValidate](#accountValidate)
-- [accountsBalances](#accountsBalances)
-- [call](#call)
-- [estimateGas](#estimateGas)
-- [generateOfflineBlock](#generateOfflineBlock)
-- [getBlock](#getBlock)
-- [getBlockState](#getBlockState)
-- [getBlockStates](#getBlockStates)
-- [getPastEvents](#getPastEvents)
-- [sendBlock](#sendBlock)
-- [sendOfflineBlock](#sendOfflineBlock)
-- [signMsg](#signMsg)
-- [stableBlocks](#stableBlocks)
-- [status](#status)
-- [stop](#stop)
-- [version](#version)
-- [witnessList](#witnessList)
-
 ## accountBalance
 
 获取指定账户余额
@@ -58,7 +29,7 @@ request.accountBalance
 | 1    | Invalid account           |
 | 100  | Missing parameter account |
 
-[返回文档目录](#文档目录)
+
 
 ## accountBlockList
 
@@ -98,7 +69,7 @@ request.accountBlockList
 | 5    | Index not found                                |
 | 100  | Missing parameter                              |
 
-[返回文档目录](#文档目录)
+
 
 ## accountChangePwd
 
@@ -137,7 +108,7 @@ request.accountChangePwd
 | 5    | Wrong old password                                                                                                                       |
 | 100  | Missing parameter                                                                                                                        |
 
-[返回文档目录](#文档目录)
+
 
 ## accountCode
 
@@ -166,7 +137,7 @@ request.accountCode
 | ---- | --------------- |
 | 1    | Invalid account |
 
-[返回文档目录](#文档目录)
+
 
 ## accountCreate
 
@@ -201,7 +172,7 @@ request.accountCreate
 | 3    | Invalid password! A valid password must contain characters from letters (a-Z, A-Z), digits (0-9) and special characters (!@#\$%^&\*) |
 | 100  | Missing parameter pwd                                                                                                                |
 
-[返回文档目录](#文档目录)
+
 
 ## accountExport
 
@@ -232,7 +203,7 @@ request.accountExport
 | 1    | Invalid account   |
 | 2    | Account not found |
 
-[返回文档目录](#文档目录)
+
 
 ## accountImport
 
@@ -267,7 +238,7 @@ request.accountImport
 | 2    | Invalid json               |
 | 100  | Missing parameter jsonFile |
 
-[返回文档目录](#文档目录)
+
 
 ## accountList
 
@@ -283,7 +254,7 @@ request.accountList
 | msg      | string | -                             |
 | accounts | object | accounts: {string[]} 账户列表 |
 
-[返回文档目录](#文档目录)
+
 
 ## accountLock
 
@@ -317,7 +288,7 @@ request.accountLock
 | 2    | Account not found |
 | 100  | Missing parameter |
 
-[返回文档目录](#文档目录)
+
 
 ## accountRemove
 
@@ -352,7 +323,7 @@ request.accountRemove
 | 3    | Wrong password    |
 | 100  | Missing parameter |
 
-[返回文档目录](#文档目录)
+
 
 ## accountUnlock
 
@@ -387,7 +358,7 @@ request.accountUnlock
 | 3    | Wrong password    |
 | 100  | Missing parameter |
 
-[返回文档目录](#文档目录)
+
 
 ## accountValidate
 
@@ -411,7 +382,7 @@ request.accountValidate
 | msg   | string | -                                      |
 | valid | string | 验证结果，0：格式不合法，1：格式合法。 |
 
-[返回文档目录](#文档目录)
+
 
 ## accountsBalances
 
@@ -442,7 +413,7 @@ request.accountsBalances
 | 1    | Invalid account           |
 | 100  | Missing parameter account |
 
-[返回文档目录](#文档目录)
+
 
 ## call
 
@@ -480,7 +451,7 @@ request.call
 | 6    | Invalid mci format     |
 | 100  | Missing parameter      |
 
-[返回文档目录](#文档目录)
+
 
 ## estimateGas
 
@@ -525,7 +496,7 @@ request.estimateGas
 | 9    | IGas not enough or excute fail |
 | 100  | Missing parameter              |
 
-[返回文档目录](#文档目录)
+
 
 ## generateOfflineBlock
 
@@ -579,7 +550,7 @@ request.generateOfflineBlock
 | 100  | Missing parameter transaction |
 | 110  | transaction not valid         |
 
-[返回文档目录](#文档目录)
+
 
 ## getBlock
 
@@ -609,7 +580,7 @@ request.getBlock
 | ---- | ------------------- |
 | 1    | Invalid hash format |
 
-[返回文档目录](#文档目录)
+
 
 ## getBlockState
 
@@ -639,7 +610,7 @@ request.getBlockState
 | ---- | ------------------- |
 | 1    | Invalid hash format |
 
-[返回文档目录](#文档目录)
+
 
 ## getBlockStates
 
@@ -669,7 +640,7 @@ request.getBlockStates
 | ---- | ------------------- |
 | 1    | Invalid hash format |
 
-[返回文档目录](#文档目录)
+
 
 ## getPastEvents
 
@@ -677,7 +648,7 @@ request.getBlockStates
 
 等待补充。。。
 
-[返回文档目录](#文档目录)
+
 
 ## sendBlock
 
@@ -727,7 +698,7 @@ request.sendBlock
 | 100  | Missing parameter transaction |
 | 110  | transaction not valid         |
 
-[返回文档目录](#文档目录)
+
 
 ## sendOfflineBlock
 
@@ -775,7 +746,7 @@ request.sendOfflineBlock
 | 100  | Missing parameter        |
 | 110  | block not valid          |
 
-[返回文档目录](#文档目录)
+
 
 ## signMsg
 
@@ -810,7 +781,7 @@ request.signMsg
 | 3    | Wrong password            |
 | 100  | Missing parameter         |
 
-[返回文档目录](#文档目录)
+
 
 ## stableBlocks
 
@@ -844,7 +815,7 @@ request.stableBlocks
 | 2    | Invalid limit format                           |
 | 3    | Limit too large, it can not be large than 1000 |
 
-[返回文档目录](#文档目录)
+
 
 ## status
 
@@ -864,7 +835,7 @@ request.status
 | last_mci                | number | 最大主链 index                                                                         |
 | last_stable_block_index | number | 最大稳定交易的 index, 稳定交易的 index 从 0 开始依次递增，表示每笔交易稳定后的全局顺序 |
 
-[返回文档目录](#文档目录)
+
 
 ## stop
 
@@ -881,7 +852,7 @@ request.stop
 | cdoe | number | -    |
 | msg  | string | -    |
 
-[返回文档目录](#文档目录)
+
 
 ## version
 
@@ -901,7 +872,7 @@ request.version
 | rpc_version   | string | -    |
 | store_version | string | -    |
 
-[返回文档目录](#文档目录)
+
 
 ## witnessList
 
@@ -919,4 +890,4 @@ request.witnessList
 | msg          | string | -          |
 | witness_list | Array  | 见证人列表 |
 
-[返回文档目录](#文档目录)
+

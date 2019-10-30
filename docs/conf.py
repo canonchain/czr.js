@@ -46,7 +46,7 @@ source_suffix = ['.rst', '.md']
 master_doc = 'index'
 
 # General information about the project.
-project = u'标准连测试文档'
+project = u'czr.js'
 copyright = u'2018, Read the Docs'
 
 # The version info for the project you're documenting, acts as replacement for
