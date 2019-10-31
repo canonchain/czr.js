@@ -6,7 +6,7 @@ const assert = require('assert');
 const expect = require('chai').expect;
 const bs58check = require("bs58check");
 
-function encode_account(pub) {
+function encodeAccount(pub) {
     let version = Buffer.from([0x01]);
     let v_pub = Buffer.concat([version, pub]);
     return "czr_" + bs58check.encode(v_pub);

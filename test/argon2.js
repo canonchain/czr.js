@@ -45,7 +45,7 @@ async function createAccount(opts, iv, privateKey) {
 
                 let pubVal = kc.pub.toString('hex').toUpperCase();
 
-                let account_c = encode_account(kc.pub);
+                let account_c = encodeAccount(kc.pub);
                 resolve(
                     {
                         "derive_pwd": derive_pwd_val,
@@ -63,7 +63,7 @@ async function createAccount(opts, iv, privateKey) {
 }
 
 
-function encode_account(pub) {
+function encodeAccount(pub) {
     let version = Buffer.from([0x01]);
     let v_pub = Buffer.concat([version, pub]);
     let account = "czr_" + bs58check.encode(v_pub);

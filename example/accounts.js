@@ -2,25 +2,25 @@ let Czr = require("../src/index.js");
 let czr = new Czr({ dev: true });
 // let czr = new Czr();
 //TODO 创建账号
-// czr.accounts.create(123456).then(res => {
-//     console.log("创建账号收到结果\n", res);//res.account
-//     const file = {
-//         "account": "czr_3M3dbuG3hWoeykQroyhJssdS15Bzocyh7wryG75qUWDxoyzBca", "kdf_salt": "AF8460A7D28A396C62D6C51620B87789",
-//         "iv": "A695DDC35ED9F3183A09FED1E6D92083", "ciphertext": "96D6B77BC031116919956F1904F25601C29036A9232D638536964E8ADC034360"
-//     };
+czr.accounts.create(123456).then(res => {
+    console.log("创建账号收到结果\n", res);//res.account
+    const file = {
+        "account": "czr_3M3dbuG3hWoeykQroyhJssdS15Bzocyh7wryG75qUWDxoyzBca", "kdf_salt": "AF8460A7D28A396C62D6C51620B87789",
+        "iv": "A695DDC35ED9F3183A09FED1E6D92083", "ciphertext": "96D6B77BC031116919956F1904F25601C29036A9232D638536964E8ADC034360"
+    };
 
 
-//     console.log("***********************");
-//     // console.log(`file:${JSON.stringify(file)}`);
-//     console.log(`res.account:${JSON.stringify(res)}`);
-//     console.log("***********************");
+    console.log("***********************");
+    // console.log(`file:${JSON.stringify(file)}`);
+    console.log(`res.account:${JSON.stringify(res)}`);
+    console.log("***********************");
 
-//     // czr.request.accountImport(JSON.stringify(res)).then(function (res) {
-//     //     console.log(`res`,res);
-//     // });
-// }).catch(err => {
-//     console.log("err===>", err);
-// });
+    // czr.request.accountImport(JSON.stringify(res)).then(function (res) {
+    //     console.log(`res`,res);
+    // });
+}).catch(err => {
+    console.log("err===>", err);
+});
 
 
 let keyStore = {
@@ -99,14 +99,14 @@ czr.accounts.decrypt(testfile0, 1232456).then(res => {
 //     "kdf_salt": "3C56C2ED0E388A41005E5937DDCEB857"
 // }
 
-// czr.accounts.decrypt(account_keystore, '1234qwer')
-//     .then(privateKey => {
-//         console.log('privateKey', privateKey)
-//         let blockHash='5E844EE4D2E26920F8B0C4B7846929057CFCE48BF40BA269B173648999630053';
-//         czr.accounts.sign(blockHash, privateKey)
-//             .then(signature => {
-//                 console.log('signature', signature)
-//             })
-//             .catch(console.error)
-//     })
-//     .catch(console.error)
+czr.accounts.decrypt(account_keystore, '1234qwer')
+    .then(privateKey => {
+        console.log('privateKey', privateKey)
+        let blockHash='5E844EE4D2E26920F8B0C4B7846929057CFCE48BF40BA269B173648999630053';
+        czr.accounts.sign(blockHash, privateKey)
+            .then(signature => {
+                console.log('signature', signature)
+            })
+            .catch(console.error)
+    })
+    .catch(console.error)

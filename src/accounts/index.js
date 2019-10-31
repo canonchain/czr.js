@@ -7,7 +7,7 @@ const edPro = require("ed25519-wasm-pro");
 
 const bs58check = require("bs58check");
 
-function encode_account(pub) {
+function encodeAccount(pub) {
     let version = Buffer.from([0x01]);
     let v_pub = Buffer.concat([version, pub]);
     return "czr_" + bs58check.encode(v_pub);
@@ -57,7 +57,7 @@ async function createAccount(password, COSTNUM) {
                     crypto.randomFillSync(privateKey);
 
                     let accFile = {
-                        account: encode_account(publicKey),
+                        account: encodeAccount(publicKey),
                         kdf_salt: kdf_salt.toString('hex').toUpperCase(),
                         iv: iv.toString('hex').toUpperCase(),
                         ciphertext: ciphertext.toString('hex').toUpperCase()
@@ -131,7 +131,7 @@ async function validateAccount(keystore, password, COSTNUM) {
             edPro.ready(function () {
                 const keypair = edPro.createKeyPair(Buffer.from(prv1, "hex"))
                 let compare = Buffer.from(keypair.publicKey.buffer);
-                if (encode_account(compare) === keystore.account) {
+                if (encodeAccount(compare) === keystore.account) {
                     resolve(true);
                 } else {
                     resolve(false);
@@ -220,9 +220,9 @@ Accounts.prototype.sign = async function (block, privateKey) {
 /*
 * 解密和签名
 * */
-Accounts.prototype.decryptAndSign = function (keystore, password, block) {
-    return decryptAccount(keystore, password, this.COSTNUM)
-};
+// Accounts.prototype.decryptAndSign = function (keystore, password, block) {
+//     return decryptAccount(keystore, password, this.COSTNUM)
+// };
 
 // /**
 //  * 解码账户

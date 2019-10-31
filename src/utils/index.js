@@ -6,14 +6,8 @@ let Hash = require("./lib/hash");
 let unitMap = {
     'none': '0',
     'None': '0',
-    'king': '1',
-    'King': '1',
-    'kking': '1000',
-    'Kking': '1000',
-    'mking': '1000000',
-    'Mking': '1000000',
-    'gking': '1000000000',
-    'Gking': '1000000000',
+    'can': '1',
+    'Can': '1',
     'czr': '1000000000000000000',
     'CZR': '1000000000000000000',
 };
@@ -23,7 +17,7 @@ let decode = require("./helper/decode");
 let encode = require("./helper/encode");
 // let encode = {};
 
-let encode_account = function (pub) {
+let encodeAccount = function (pub) {
     pub = Buffer.from(pub, "hex");
     let version = Buffer.from([0x01]);
     let v_pub = Buffer.concat([version, pub]);
@@ -58,17 +52,17 @@ let getValueOfUnit = function (unit) {
     return new BigNumber(unitValue, 10);
 };
 
-let fromKing = function (number, unit) {
+let fromCan = function (number, unit) {
     let returnValue = toBigNumber(number).dividedBy(getValueOfUnit(unit));
     return isBigNumber(number) ? returnValue : returnValue.toString(10);
 };
 
-let fromKingToken = function (number, precision) {
+let fromCanToken = function (number, precision) {
     let returnValue = toBigNumber(number).dividedBy(precision);
     return isBigNumber(number) ? returnValue : returnValue.toString(10);
 };
 
-let toKing = function (number, unit) {
+let toCan = function (number, unit) {
     let returnValue = toBigNumber(number).times(getValueOfUnit(unit));
     return isBigNumber(number) ? returnValue : returnValue.toString(10);
 };
@@ -224,10 +218,10 @@ module.exports = {
 
     encode: encode,
     decode: decode,
-    encode_account: encode_account,
-    fromKing: fromKing,
-    fromKingToken: fromKingToken,
-    toKing: toKing,
+    encodeAccount: encodeAccount,
+    fromCan: fromCan,
+    fromCanToken: fromCanToken,
+    toCan: toCan,
     judge: judge,
     sha3: sha3
 };

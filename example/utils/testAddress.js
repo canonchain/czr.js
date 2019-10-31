@@ -1,6 +1,6 @@
 const bs58check = require("bs58check");
 
-function encode_account() {
+function encodeAccount() {
     let pub=Buffer.from('B5F327E3F07F2C94DADCDB6D122ADDAFD3AA3AC9507E8F8368F9AD3E6A378798', "hex");
     let version = Buffer.from([0x01]);
     let v_pub = Buffer.concat([version, pub]);
@@ -15,4 +15,4 @@ function encode_account() {
     // console.log(bytecode.toString("hex").substring(2).toUpperCase());
 }
 
-encode_account()
+encodeAccount()
