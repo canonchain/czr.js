@@ -187,7 +187,7 @@ Accounts.prototype.create = function (password) {
 * parame: keystore pwd
 * return: boolena
 * */
-Accounts.prototype.validate_account = function (key, password) {
+Accounts.prototype.validateAccount = function (key, password) {
     return validateAccount(key, password, this.COSTNUM);
 };
 

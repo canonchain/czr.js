@@ -4,7 +4,7 @@ let czr = new Czr();
 
 let kys ={"account":"czr_4SB2CTeS2FkgDgSMcgVVmJYo8DRXEJ5xtcSKw6gX1XoJ8w67yr","ciphertext":"81EEF422810CCEB9980A8992F46788589508714BB9A5D6EEA8F9213E9F271425","iv":"F99796558C54A4D142BAD72E5D3858AF","kdf_salt":"283C5E6F51D1E0BE186B1139C64275C3"};
 //TODO 验证账号
-czr.accounts.validate_account(kys,'12345678').then(res => {
+czr.accounts.validateAccount(kys,'12345678').then(res => {
     console.log("收到结果\n", res);
 }).catch(err => {
     console.log("err===>",err);

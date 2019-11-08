@@ -81,7 +81,7 @@ let myContract = new czr.Contract(
 
 ---
 
-## 属性
+## myContract 属性
 
 - options
 
@@ -185,7 +185,7 @@ myContract.options.jsonInterface = [...];
 
 ---
 
-## methods 属性
+## myContract.methods 属性
 
 `myContract.methods` 返回该合约所有可调用的方法；
 
@@ -195,7 +195,7 @@ myContract.options.jsonInterface = [...];
 
 ---
 
-## 方法
+## myContract 方法
 
 - clone
 - deploy

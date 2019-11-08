@@ -40,7 +40,7 @@ describe('Accounts', function () {
         });
     });
 
-    describe('#validate_account()', function () {
+    describe('#validateAccount()', function () {
         it('should return true', function (done) {
             let file = {
                 account: 'czr_3RM17KudgsJztax6iDU285Wnx8GQFJqTGNCP7tGdFr2ywTs9q7',
@@ -49,7 +49,7 @@ describe('Accounts', function () {
                 ciphertext:
                     'E1864F899C301CCE7170B91B067961D2B4DAE18F233837B6F3DCED1025E8668E'
             };
-            czr.accounts.validate_account(file, 'pa55word')
+            czr.accounts.validateAccount(file, 'pa55word')
                 .then(res => {
                     expect(true).to.equal(res)
                     done()

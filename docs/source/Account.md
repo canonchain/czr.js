@@ -31,12 +31,12 @@ czr.accounts.create(123456).then(res => {
 });
 ```
 
-## validate_account
+## validateAccount
 
 验证 `keystore`文件 和 密码 是否可以正常解析
 
 ```
-czr.accounts.validate_account(keystore,password)
+czr.accounts.validateAccount(keystore,password)
     .then(res => {})
     .catch()
 ```
