@@ -23,6 +23,14 @@ let encodeAccount = function (pub) {
     let v_pub = Buffer.concat([version, pub]);
     return "czr_" + bs58check.encode(v_pub);
 }
+let decodeAccount = function (czr_address) {
+    let res = czr_address.split("_")
+    if (!res[1]) {
+        throw Error(`Canonchain account (${czr_address}) format error.`)
+    }
+    let bytecode = bs58check.decode(res[1])
+    return bytecode.toString("hex").substring(2).toUpperCase();
+}
 
 let isString = function (obj) {
     return typeof obj === 'string' && obj.constructor === String;
@@ -219,6 +227,7 @@ module.exports = {
     encode: encode,
     decode: decode,
     encodeAccount: encodeAccount,
+    decodeAccount: decodeAccount,
     fromCan: fromCan,
     fromCanToken: fromCanToken,
     toCan: toCan,

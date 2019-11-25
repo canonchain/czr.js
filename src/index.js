@@ -3,6 +3,7 @@ let version = require('../package.json').version;
 let Accounts = require('./accounts');
 let HttpRequest = require('./httprequest');
 let utils = require('./utils');
+let abi = require('./abi');
 let Contract = require('./contract');
 
 let Czr = function (request) {
@@ -21,6 +22,7 @@ Czr.prototype = {
     constructor: Czr,
     version: version,
     utils: utils,
+    abi: abi,
     Contract: Contract
 };
 
