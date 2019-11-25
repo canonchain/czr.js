@@ -1,6 +1,6 @@
 # Abi
 
-## toBigNumber
+## encodeEventSignature
 
 将事件名编码为其 ABI 签名，该签名是事件名称与参数的 sha3 哈希。
 
@@ -10,9 +10,9 @@ czr.abi.encodeEventSignature(eventName);
 
 ### 参数
 
-| 字段      | 类型   | 描述   |
-| --------- | ------ | ------ |
-| eventName | String | Object | 事件名称编码。或事件的 JSON 接口对象。<br/>如果是字符串，则必须采用形式 `event(type,type,...)`，例如：`myEvent(uint256,uint32[],bytes10,bytes)` |
+| 字段      | 类型            | 描述                                                                                                                                            |
+| --------- | --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| eventName | String / Object | 事件名称编码。或事件的 JSON 接口对象。<br/>如果是字符串，则必须采用形式 `event(type,type,...)`，例如：`myEvent(uint256,uint32[],bytes10,bytes)` |
 
 ### 返回结果
 
