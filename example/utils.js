@@ -23,7 +23,6 @@ console.log(czr.utils.encodeAccount('22'))
 console.log(czr.utils.decodeAccount('czr_4KsqkcZCs6i9VU2WUsiqTU8M6i3WYpVPFMcMXSkKmB92GJvYt1'))
 try {
     console.log(czr.utils.decodeAccount('22'))
-
 } catch (error) {
     console.log(error)
 }

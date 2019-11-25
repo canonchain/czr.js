@@ -157,6 +157,35 @@ let czrAcc = czr.utils.encodeAccount("B5F327E3F07F2C94DADCDB6D122ADDAFD3AA3AC950
 console.log(czrAcc);//czr_4KsqkcZCs6i9VU2WUsiqTU8M6i3WYpVPFMcMXSkKmB92GJvYt1
 ```
 
+## decodeAccount
+
+把`czr_xxx` 格式的账户，转为十六进制账户
+
+```
+czr.utils.decodeAccount(value);
+```
+
+### 参数
+
+| 字段  | 类型           | 描述         |
+| ----- | -------------- | ------------ |
+| value | czr 格式的账户 | 需要转换的值 |
+
+### 返回结果
+
+十六进制账户
+
+### 例子
+
+```
+try {
+    let acc = czr.utils.decodeAccount('czr_4KsqkcZCs6i9VU2WUsiqTU8M6i3WYpVPFMcMXSkKmB92GJvYt1');
+    console.log(acc)
+} catch (error) {
+    console.log(error)
+}
+```
+
 ## fromCan
 
 从`can`单位转为 `czr` 单位
