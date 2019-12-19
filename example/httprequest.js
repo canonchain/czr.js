@@ -1,8 +1,12 @@
 let Czr = require("../src/index.js");
-let czr = new Czr();
+let czr = new Czr({
+    dev: false,
+    host: "127.0.0.1",
+    port: 8760
+});
 
-const  now = new Date();
-console.log(now.getFullYear(),(now.getMonth()+1),now.getDate()," : ",now.getHours(),now.getMinutes(),now.getSeconds());
+const now = new Date();
+console.log(now.getFullYear(), (now.getMonth() + 1), now.getDate(), " : ", now.getHours(), now.getMinutes(), now.getSeconds());
 
 // const opt ={ action: 'accounts_balances',
 //     accounts:
@@ -15,23 +19,23 @@ console.log(now.getFullYear(),(now.getMonth()+1),now.getDate()," : ",now.getHour
 //     console.log("accountValidate catch",error)
 // });
 
-let timer =null;
+let timer = null;
 let falg = 0;
-const pageUtility={
-    runTimer:function () {
+const pageUtility = {
+    runTimer: function () {
         falg++;
         console.log(`重启定时器,${falg}`);
-        timer=setTimeout(function () {
+        timer = setTimeout(function () {
             pageUtility.getList()
-        },10)
+        }, 10)
     },
-    getList:function () {
+    getList: function () {
         console.log(`开始发送请求`);
         czr.request.accountList().then(function (res) {
             console.log(`收到数据`);
             pageUtility.runTimer();
-        }).catch(function(error){
-            console.log("accountList catch",error)
+        }).catch(function (error) {
+            console.log("遇到错误", error)
         });
     }
 };

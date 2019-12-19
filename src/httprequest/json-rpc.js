@@ -75,7 +75,7 @@ var Client = function (options) {
     else {
         serv = http;
         agent = new http.Agent();
-        conf.port = options.port || 5080;
+        conf.port = options.port || 8765;
     }
 
     /* Private: Returns options object for http request */
@@ -163,11 +163,11 @@ var Client = function (options) {
 
         request.on('response', function (response) {
             var data = '';
-            response.on('data', function(bytes) {
+            response.on('data', function (bytes) {
                 data += bytes;
             });
 
-            response.on('end', function() {
+            response.on('end', function () {
                 var error, result;
 
                 //TODO Deal with 401 and other codes

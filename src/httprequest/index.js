@@ -1,11 +1,14 @@
 "use strict";
 // let rpc     = require('node-json-rpc');
+// const options = {
+//     host: "127.0.0.1",
+//     port: 8765
+// };
 let rpc = require('./rpc-main');
-let options = require("./config");
 let client;
 
 let HttpRequest = function (host, timeout, apiVersion) {
-    let hostCon = Object.assign(options, host);
+    let hostCon = Object.assign({}, host);
     client = new rpc.Client(hostCon);
     // this.timeout = timeout || 0;
     // this.apiVersion = apiVersion || "v1";
