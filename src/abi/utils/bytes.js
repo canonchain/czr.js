@@ -6,12 +6,14 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var types_1 = require("./types");
 var errors = require("./errors");
+let bs58check = require("bs58check");
+
 exports.AddressZero = '0x0000000000000000000000000000000000000000';
 exports.HashZero = '0x0000000000000000000000000000000000000000000000000000000000000000';
-function isBigNumber(value) {
+function isBigNumber (value) {
     return (value instanceof types_1.BigNumber);
 }
-function addSlice(array) {
+function addSlice (array) {
     if (array.slice) {
         return array;
     }
@@ -21,7 +23,7 @@ function addSlice(array) {
     };
     return array;
 }
-function isArrayish(value) {
+function isArrayish (value) {
     if (!value || parseInt(String(value.length)) != value.length || typeof (value) === 'string') {
         return false;
     }
@@ -34,7 +36,7 @@ function isArrayish(value) {
     return true;
 }
 exports.isArrayish = isArrayish;
-function arrayify(value) {
+function arrayify (value) {
     if (value == null) {
         errors.throwError('cannot convert null value to array', errors.INVALID_ARGUMENT, { arg: 'value', value: value });
     }
@@ -42,21 +44,34 @@ function arrayify(value) {
         value = value.toHexString();
     }
     if (typeof (value) === 'string') {
-        var match = value.match(/^(0x)?[0-9a-fA-F]*$/);
-        if (!match) {
-            errors.throwError('invalid hexidecimal string', errors.INVALID_ARGUMENT, { arg: 'value', value: value });
+        // var match = value.match(/^(0x)?[0-9a-fA-F]*$/);
+        // if (!match) {
+        //     errors.throwError('invalid hexidecimal string', errors.INVALID_ARGUMENT, { arg: 'value', value: value });
+        // }
+        // if (match[1] !== '0x') {
+        //     errors.throwError('hex string must have 0x prefix', errors.INVALID_ARGUMENT, { arg: 'value', value: value });
+        // }
+        // value = value.substring(2);
+        // if (value.length % 2) {
+        //     value = '0' + value;
+        // }
+        // var result = [];
+        // for (var i = 0; i < value.length; i += 2) {
+        //     result.push(parseInt(value.substr(i, 2), 16));
+        // }
+        if (value.indexOf('0x') === -1) {
+            let bytecode = bs58check.decode(value.substring(4));
+            // value = bytecode.toString("hex");
+            value = bytecode.toString("hex").substring(2);
+        } else {
+            value = value.substring(2).toLowerCase();
         }
-        if (match[1] !== '0x') {
-            errors.throwError('hex string must have 0x prefix', errors.INVALID_ARGUMENT, { arg: 'value', value: value });
-        }
-        value = value.substring(2);
-        if (value.length % 2) {
-            value = '0' + value;
-        }
+
         var result = [];
         for (var i = 0; i < value.length; i += 2) {
             result.push(parseInt(value.substr(i, 2), 16));
         }
+
         return addSlice(new Uint8Array(result));
     }
     else if (typeof (value) === 'string') {
@@ -68,7 +83,7 @@ function arrayify(value) {
     return null;
 }
 exports.arrayify = arrayify;
-function concat(objects) {
+function concat (objects) {
     var arrays = [];
     var length = 0;
     for (var i = 0; i < objects.length; i++) {
@@ -85,7 +100,7 @@ function concat(objects) {
     return addSlice(result);
 }
 exports.concat = concat;
-function stripZeros(value) {
+function stripZeros (value) {
     var result = arrayify(value);
     if (result.length === 0) {
         return result;
@@ -102,7 +117,7 @@ function stripZeros(value) {
     return result;
 }
 exports.stripZeros = stripZeros;
-function padZeros(value, length) {
+function padZeros (value, length) {
     value = arrayify(value);
     if (length < value.length) {
         throw new Error('cannot pad');
@@ -112,7 +127,7 @@ function padZeros(value, length) {
     return addSlice(result);
 }
 exports.padZeros = padZeros;
-function isHexString(value, length) {
+function isHexString (value, length) {
     if (typeof (value) !== 'string' || !value.match(/^0x[0-9A-Fa-f]*$/)) {
         return false;
     }
@@ -123,7 +138,7 @@ function isHexString(value, length) {
 }
 exports.isHexString = isHexString;
 var HexCharacters = '0123456789abcdef';
-function hexlify(value) {
+function hexlify (value) {
     if (isBigNumber(value)) {
         return value.toHexString();
     }
@@ -169,14 +184,14 @@ function hexlify(value) {
     return 'never';
 }
 exports.hexlify = hexlify;
-function hexDataLength(data) {
+function hexDataLength (data) {
     if (!isHexString(data) || (data.length % 2) !== 0) {
         return null;
     }
     return (data.length - 2) / 2;
 }
 exports.hexDataLength = hexDataLength;
-function hexDataSlice(data, offset, length) {
+function hexDataSlice (data, offset, length) {
     if (!isHexString(data)) {
         errors.throwError('invalid hex data', errors.INVALID_ARGUMENT, { arg: 'value', value: data });
     }
@@ -190,7 +205,7 @@ function hexDataSlice(data, offset, length) {
     return '0x' + data.substring(offset);
 }
 exports.hexDataSlice = hexDataSlice;
-function hexStripZeros(value) {
+function hexStripZeros (value) {
     if (!isHexString(value)) {
         errors.throwError('invalid hex string', errors.INVALID_ARGUMENT, { arg: 'value', value: value });
     }
@@ -200,7 +215,7 @@ function hexStripZeros(value) {
     return value;
 }
 exports.hexStripZeros = hexStripZeros;
-function hexZeroPad(value, length) {
+function hexZeroPad (value, length) {
     if (!isHexString(value)) {
         errors.throwError('invalid hex string', errors.INVALID_ARGUMENT, { arg: 'value', value: value });
     }
@@ -210,10 +225,10 @@ function hexZeroPad(value, length) {
     return value;
 }
 exports.hexZeroPad = hexZeroPad;
-function isSignature(value) {
+function isSignature (value) {
     return (value && value.r != null && value.s != null);
 }
-function splitSignature(signature) {
+function splitSignature (signature) {
     var v = 0;
     var r = '0x', s = '0x';
     if (isSignature(signature)) {
@@ -252,7 +267,7 @@ function splitSignature(signature) {
     };
 }
 exports.splitSignature = splitSignature;
-function joinSignature(signature) {
+function joinSignature (signature) {
     signature = splitSignature(signature);
     return hexlify(concat([
         signature.r,

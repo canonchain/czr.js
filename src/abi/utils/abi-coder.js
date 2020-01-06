@@ -5,7 +5,7 @@ var __extends = (this && this.__extends) || (function () {
         function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
     return function (d, b) {
         extendStatics(d, b);
-        function __() { this.constructor = d; }
+        function __ () { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
@@ -42,7 +42,7 @@ exports.defaultCoerceFunc = function (type, value) {
 // Parsing for Solidity Signatures
 var regexParen = new RegExp("^([^)(]*)\\((.*)\\)([^)(]*)$");
 var regexIdentifier = new RegExp("^[A-Za-z_][A-Za-z0-9_]*$");
-function verifyType(type) {
+function verifyType (type) {
     // These need to be transformed to their full description
     if (type.match(/^uint($|[^1-9])/)) {
         type = 'uint256' + type.substring(4);
@@ -52,8 +52,8 @@ function verifyType(type) {
     }
     return type;
 }
-function parseParam(param, allowIndexed) {
-    function throwError(i) {
+function parseParam (param, allowIndexed) {
+    function throwError (i) {
         throw new Error('unexpected character "' + param[i] + '" at position ' + i + ' in "' + param + '"');
     }
     var parent = { type: '', name: '', state: { allowType: true } };
@@ -171,7 +171,7 @@ function parseParam(param, allowIndexed) {
     return parent;
 }
 // @TODO: Better return type
-function parseSignatureEvent(fragment) {
+function parseSignatureEvent (fragment) {
     var abi = {
         anonymous: false,
         inputs: [],
@@ -204,7 +204,7 @@ function parseSignatureEvent(fragment) {
     }
     return abi;
 }
-function parseSignatureFunction(fragment) {
+function parseSignatureFunction (fragment) {
     var abi = {
         constant: false,
         inputs: [],
@@ -260,21 +260,21 @@ function parseSignatureFunction(fragment) {
     }
     return abi;
 }
-function parseParamType(type) {
+function parseParamType (type) {
     return parseParam(type, true);
 }
 exports.parseParamType = parseParamType;
 // @TODO: Allow a second boolean to expose names
-function formatParamType(paramType) {
+function formatParamType (paramType) {
     return getParamCoder(exports.defaultCoerceFunc, paramType).type;
 }
 exports.formatParamType = formatParamType;
 // @TODO: Allow a second boolean to expose names and modifiers
-function formatSignature(fragment) {
+function formatSignature (fragment) {
     return fragment.name + '(' + fragment.inputs.map(function (i) { return formatParamType(i); }).join(',') + ')';
 }
 exports.formatSignature = formatSignature;
-function parseSignature(fragment) {
+function parseSignature (fragment) {
     if (typeof (fragment) === 'string') {
         // Make sure the "returns" is surrounded by a space and all whitespace is exactly one space
         fragment = fragment.replace(/\(/g, ' (').replace(/\)/g, ') ').replace(/\s+/g, ' ');
@@ -293,7 +293,7 @@ function parseSignature(fragment) {
 }
 exports.parseSignature = parseSignature;
 var Coder = /** @class */ (function () {
-    function Coder(coerceFunc, name, type, localName, dynamic) {
+    function Coder (coerceFunc, name, type, localName, dynamic) {
         this.coerceFunc = coerceFunc;
         this.name = name;
         this.type = type;
@@ -305,7 +305,7 @@ var Coder = /** @class */ (function () {
 // Clones the functionality of an existing Coder, but without a localName
 var CoderAnonymous = /** @class */ (function (_super) {
     __extends(CoderAnonymous, _super);
-    function CoderAnonymous(coder) {
+    function CoderAnonymous (coder) {
         var _this = _super.call(this, coder.coerceFunc, coder.name, coder.type, undefined, coder.dynamic) || this;
         properties_1.defineReadOnly(_this, 'coder', coder);
         return _this;
@@ -316,7 +316,7 @@ var CoderAnonymous = /** @class */ (function (_super) {
 }(Coder));
 var CoderNull = /** @class */ (function (_super) {
     __extends(CoderNull, _super);
-    function CoderNull(coerceFunc, localName) {
+    function CoderNull (coerceFunc, localName) {
         return _super.call(this, coerceFunc, 'null', '', localName, false) || this;
     }
     CoderNull.prototype.encode = function (value) {
@@ -335,7 +335,7 @@ var CoderNull = /** @class */ (function (_super) {
 }(Coder));
 var CoderNumber = /** @class */ (function (_super) {
     __extends(CoderNumber, _super);
-    function CoderNumber(coerceFunc, size, signed, localName) {
+    function CoderNumber (coerceFunc, size, signed, localName) {
         var _this = this;
         var name = ((signed ? 'int' : 'uint') + (size * 8));
         _this = _super.call(this, coerceFunc, name, name, localName, false) || this;
@@ -388,7 +388,7 @@ var CoderNumber = /** @class */ (function (_super) {
 var uint256Coder = new CoderNumber(function (type, value) { return value; }, 32, false, 'none');
 var CoderBoolean = /** @class */ (function (_super) {
     __extends(CoderBoolean, _super);
-    function CoderBoolean(coerceFunc, localName) {
+    function CoderBoolean (coerceFunc, localName) {
         return _super.call(this, coerceFunc, 'bool', 'bool', localName, false) || this;
     }
     CoderBoolean.prototype.encode = function (value) {
@@ -417,7 +417,7 @@ var CoderBoolean = /** @class */ (function (_super) {
 }(Coder));
 var CoderFixedBytes = /** @class */ (function (_super) {
     __extends(CoderFixedBytes, _super);
-    function CoderFixedBytes(coerceFunc, length, localName) {
+    function CoderFixedBytes (coerceFunc, length, localName) {
         var _this = this;
         var name = ('bytes' + length);
         _this = _super.call(this, coerceFunc, name, name, localName, false) || this;
@@ -459,13 +459,16 @@ var CoderFixedBytes = /** @class */ (function (_super) {
 }(Coder));
 var CoderAddress = /** @class */ (function (_super) {
     __extends(CoderAddress, _super);
-    function CoderAddress(coerceFunc, localName) {
+    function CoderAddress (coerceFunc, localName) {
         return _super.call(this, coerceFunc, 'address', 'address', localName, false) || this;
     }
     CoderAddress.prototype.encode = function (value) {
-        var result = new Uint8Array(32);
+        var result = new Uint8Array(33);
         try {
-            result.set(bytes_1.arrayify(address_1.getAddress(value)), 12);
+            // result.set(bytes_1.arrayify(address_1.getAddress(value)), 12);
+            if (value !== 'czr_zero_address') {
+                result.set(bytes_1.arrayify(value));
+            }
         }
         catch (error) {
             errors.throwError('invalid address', errors.INVALID_ARGUMENT, {
@@ -491,7 +494,7 @@ var CoderAddress = /** @class */ (function (_super) {
     };
     return CoderAddress;
 }(Coder));
-function _encodeDynamicBytes(value) {
+function _encodeDynamicBytes (value) {
     var dataLength = 32 * Math.ceil(value.length / 32);
     var padding = new Uint8Array(dataLength - value.length);
     return bytes_1.concat([
@@ -500,7 +503,7 @@ function _encodeDynamicBytes(value) {
         padding
     ]);
 }
-function _decodeDynamicBytes(data, offset, localName) {
+function _decodeDynamicBytes (data, offset, localName) {
     if (data.length < offset + 32) {
         errors.throwError('insufficient data for dynamicBytes length', errors.INVALID_ARGUMENT, {
             arg: localName,
@@ -533,7 +536,7 @@ function _decodeDynamicBytes(data, offset, localName) {
 }
 var CoderDynamicBytes = /** @class */ (function (_super) {
     __extends(CoderDynamicBytes, _super);
-    function CoderDynamicBytes(coerceFunc, localName) {
+    function CoderDynamicBytes (coerceFunc, localName) {
         return _super.call(this, coerceFunc, 'bytes', 'bytes', localName, true) || this;
     }
     CoderDynamicBytes.prototype.encode = function (value) {
@@ -558,7 +561,7 @@ var CoderDynamicBytes = /** @class */ (function (_super) {
 }(Coder));
 var CoderString = /** @class */ (function (_super) {
     __extends(CoderString, _super);
-    function CoderString(coerceFunc, localName) {
+    function CoderString (coerceFunc, localName) {
         return _super.call(this, coerceFunc, 'string', 'string', localName, true) || this;
     }
     CoderString.prototype.encode = function (value) {
@@ -578,10 +581,10 @@ var CoderString = /** @class */ (function (_super) {
     };
     return CoderString;
 }(Coder));
-function alignSize(size) {
+function alignSize (size) {
     return 32 * Math.ceil(size / 32);
 }
-function pack(coders, values) {
+function pack (coders, values) {
     if (Array.isArray(values)) {
         // do nothing
     }
@@ -637,7 +640,7 @@ function pack(coders, values) {
     });
     return data;
 }
-function unpack(coders, data, offset) {
+function unpack (coders, data, offset) {
     var baseOffset = offset;
     var consumed = 0;
     var value = [];
@@ -677,7 +680,7 @@ function unpack(coders, data, offset) {
 }
 var CoderArray = /** @class */ (function (_super) {
     __extends(CoderArray, _super);
-    function CoderArray(coerceFunc, coder, length, localName) {
+    function CoderArray (coerceFunc, coder, length, localName) {
         var _this = this;
         var type = (coder.type + '[' + (length >= 0 ? length : '') + ']');
         var dynamic = (length === -1 || coder.dynamic);
@@ -749,7 +752,7 @@ var CoderArray = /** @class */ (function (_super) {
 }(Coder));
 var CoderTuple = /** @class */ (function (_super) {
     __extends(CoderTuple, _super);
-    function CoderTuple(coerceFunc, coders, localName) {
+    function CoderTuple (coerceFunc, coders, localName) {
         var _this = this;
         var dynamic = false;
         var types = [];
@@ -780,7 +783,7 @@ function getTypes(coders) {
     return type.substring(6, type.length - 1);
 }
 */
-function splitNesting(value) {
+function splitNesting (value) {
     var result = [];
     var accum = '';
     var depth = 0;
@@ -813,7 +816,7 @@ var paramTypeSimple = {
     string: CoderString,
     bytes: CoderDynamicBytes,
 };
-function getTupleParamCoder(coerceFunc, components, localName) {
+function getTupleParamCoder (coerceFunc, components, localName) {
     if (!components) {
         components = [];
     }
@@ -823,7 +826,7 @@ function getTupleParamCoder(coerceFunc, components, localName) {
     });
     return new CoderTuple(coerceFunc, coders, localName);
 }
-function getParamCoder(coerceFunc, param) {
+function getParamCoder (coerceFunc, param) {
     var coder = paramTypeSimple[param.type];
     if (coder) {
         return new coder(coerceFunc, param.name);
@@ -870,7 +873,7 @@ function getParamCoder(coerceFunc, param) {
     return null;
 }
 var AbiCoder = /** @class */ (function () {
-    function AbiCoder(coerceFunc) {
+    function AbiCoder (coerceFunc) {
         errors.checkNew(this, AbiCoder);
         if (!coerceFunc) {
             coerceFunc = exports.defaultCoerceFunc;
