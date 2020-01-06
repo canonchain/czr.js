@@ -10,7 +10,7 @@ var ethersAbiCoder = new EthersAbi(function (type, value) {
 });
 
 // result method
-function Result() {
+function Result () {
 }
 
 /**
@@ -208,15 +208,17 @@ ABICoder.prototype.decodeParameters = function (outputs, bytes) {
     returnValue.__length__ = 0;
 
     outputs.forEach(function (output, i) {
-        var decodedValue = res[returnValue.__length__];
-        decodedValue = (decodedValue === '0x') ? null : decodedValue;
+        if ((utils.judge(output) === 'object') && output.type === 'address') {
+            returnValue[output.name || i] = utils.encodeAccount(bytes.slice(2));
+        } else {
+            var decodedValue = res[returnValue.__length__];
+            decodedValue = (decodedValue === '0x') ? null : decodedValue;
 
-        returnValue[i] = decodedValue;
-
-        if ((utils.judge(output) === 'object') && output.name) {
-            returnValue[output.name] = decodedValue;
+            returnValue[i] = decodedValue;
+            if ((utils.judge(output) === 'object') && output.name) {
+                returnValue[output.name] = decodedValue;
+            }
         }
-
         returnValue.__length__++;
     });
 

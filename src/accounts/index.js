@@ -7,13 +7,17 @@ const edPro = require("ed25519-wasm-pro");
 
 const bs58check = require("bs58check");
 
-function encodeAccount(pub) {
+function encodeAccount (pub) {
+    //零地址，特殊处理
+    if (pub === "0000000000000000000000000000000000000000000000000000000000000000") {
+        return 'czr_zero_address'
+    }
     let version = Buffer.from([0x01]);
     let v_pub = Buffer.concat([version, pub]);
     return "czr_" + bs58check.encode(v_pub);
 }
 
-async function createAccount(password, COSTNUM) {
+async function createAccount (password, COSTNUM) {
     let kdf_salt = crypto.randomBytes(16);
     let iv = crypto.randomBytes(16);
     let privateKey = crypto.randomBytes(32);
@@ -75,7 +79,7 @@ async function createAccount(password, COSTNUM) {
 
 }
 
-async function decryptAccount(keystore, password, COSTNUM) {
+async function decryptAccount (keystore, password, COSTNUM) {
     keystore.kdf_salt = Buffer.from(keystore.kdf_salt, "hex");
     keystore.iv = Buffer.from(keystore.iv, "hex");
     keystore.ciphertext = Buffer.from(keystore.ciphertext, "hex");
@@ -106,7 +110,7 @@ async function decryptAccount(keystore, password, COSTNUM) {
 
 }
 
-function signBlock(block, privateKey) {
+function signBlock (block, privateKey) {
     let promise = new Promise(function (resolve, reject) {
         try {
             edPro.ready(function () {
@@ -124,7 +128,7 @@ function signBlock(block, privateKey) {
     return promise;
 }
 
-async function validateAccount(keystore, password, COSTNUM) {
+async function validateAccount (keystore, password, COSTNUM) {
     let prv1 = await decryptAccount(keystore, password, COSTNUM);
     let promise = new Promise(function (resolve, reject) {
         try {
@@ -144,7 +148,7 @@ async function validateAccount(keystore, password, COSTNUM) {
     return promise;
 }
 
-async function decryptAndSign(keystore, password, block) {
+async function decryptAndSign (keystore, password, block) {
 
 }
 

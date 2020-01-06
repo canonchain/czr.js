@@ -18,12 +18,20 @@ let encode = require("./helper/encode");
 // let encode = {};
 
 let encodeAccount = function (pub) {
+    //零地址，特殊处理
+    if (pub === "0000000000000000000000000000000000000000000000000000000000000000") {
+        return 'czr_zero_address'
+    }
     pub = Buffer.from(pub, "hex");
     let version = Buffer.from([0x01]);
     let v_pub = Buffer.concat([version, pub]);
     return "czr_" + bs58check.encode(v_pub);
 }
 let decodeAccount = function (czr_address) {
+    //零地址，特殊处理
+    if(czr_address ==='czr_zero_address'){
+        return '0000000000000000000000000000000000000000000000000000000000000000'
+    }
     let res = czr_address.split("_")
     if (!res[1]) {
         throw Error(`Canonchain account (${czr_address}) format error.`)
