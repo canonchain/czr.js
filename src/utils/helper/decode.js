@@ -56,6 +56,21 @@ function parseToArray(hex_data, fnabi) {
                             value: account
                         }
                     )
+                } else if(outputTypes[i] === "address[]"){
+                    let accounts=[]
+                    for(let j=0;j<decodedObj[i].length;j++){
+                        let pub = Buffer.from(decodedObj[i][j].substr(2), "hex");
+                        let version = Buffer.from([0x01]);
+                        let v_pub = Buffer.concat([version, pub]);
+                        accounts.push("czr_" + bs58check.encode(v_pub));
+                    }
+                    output_ary.push(
+                        {
+                            name: name || "",
+                            type: outputTypes[i],
+                            value: accounts
+                        }
+                    )
                 } else {
                     output_ary.push(
                         {

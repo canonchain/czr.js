@@ -1,5 +1,4 @@
-[![Build Status](https://travis-ci.org/canonchain/czr.js.svg?branch=master)](https://travis-ci.org/canonchain/czr.js)
-# czr.js
+# 使用演示
 
 `czr.js` 是一个与canonchain节点交互使用的库。
 
@@ -43,5 +42,3 @@ czr.request.status().then(function (res) {
     console.log("accountList catch",error)
 });
 ```
-
-`czr`这个对象上的具体方法使用，请参照 <https://czr.readthedocs.io/zh/latest/index.html>
