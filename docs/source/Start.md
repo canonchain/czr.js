@@ -14,9 +14,9 @@ npm install czr
 
 之后，您需要启动本地Canonchain节点，实例化`czr`。
 
-Canonchain下载：http://dev.canonchain.com/download.html
+Canonchain下载：<http://dev.canonchain.com/download.html>
 
-Canonchain命令行：https://canonchain.readthedocs.io/zh/latest/source/Command-Line-Interfaces.html
+Canonchain命令行：<https://canonchain.readthedocs.io/zh/latest/source/Command-Line-Interfaces.html>
 
 默认使用的端口 `127.0.0.1:8765`
 
