@@ -1,6 +1,6 @@
 var utils = require('../utils/index');
 var EthersAbi = require('./utils/abi-coder').AbiCoder;
-// console.log(EthersAbi)
+let AbiCoder = require('../utils/helper/abi-coder/index');
 
 var ethersAbiCoder = new EthersAbi(function (type, value) {
     if (type.match(/^u?int/) && !(utils.judge(value) === 'array') && (!(utils.judge(value) === 'object') || value.constructor.name !== 'BN')) {
@@ -203,13 +203,23 @@ ABICoder.prototype.decodeParameters = function (outputs, bytes) {
         throw new Error('Returned values aren\'t valid, did it run Out of Gas?');
     }
 
-    var res = ethersAbiCoder.decode(this.mapTypes(outputs), '0x' + bytes.replace(/0x/i, ''));
+    // decode data
+    let abiCoder = new AbiCoder();//
+    let res = abiCoder.decode(outputs, '0x' + bytes.replace(/0x/i, ''));//[ 'canonChain' ]
+
     var returnValue = new Result();
     returnValue.__length__ = 0;
 
     outputs.forEach(function (output, i) {
         if ((utils.judge(output) === 'object') && output.type === 'address') {
             returnValue[output.name || i] = utils.encodeAccount(bytes.slice(2));
+        } else if((utils.judge(output) === 'object') && output.type === 'address[]'){
+            var decodedValue = res[returnValue.__length__];
+            let accounts=[]
+            for(let j=0;j<decodedValue.length;j++){
+                accounts.push(utils.encodeAccount(decodedValue[j].slice(2)) );
+            }
+            returnValue[output.name || i] = accounts;
         } else {
             var decodedValue = res[returnValue.__length__];
             decodedValue = (decodedValue === '0x') ? null : decodedValue;
