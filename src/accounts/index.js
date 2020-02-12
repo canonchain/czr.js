@@ -17,10 +17,10 @@ function encodeAccount (pub) {
     return "czr_" + bs58check.encode(v_pub);
 }
 
-async function createAccount (password, COSTNUM) {
+async function createAccount (password, COSTNUM,private_key) {
     let kdf_salt = crypto.randomBytes(16);
     let iv = crypto.randomBytes(16);
-    let privateKey = crypto.randomBytes(32);
+    let privateKey = private_key ? Buffer.from(private_key.toUpperCase(), "hex") : crypto.randomBytes(32);
 
 
     //测试的
@@ -184,6 +184,14 @@ let Accounts = function (dev) {
  * */
 Accounts.prototype.create = function (password) {
     return createAccount(password, this.COSTNUM);
+};
+
+
+Accounts.prototype.createByPrivate = function (password , private_key) {
+    if(!private_key){
+        return 'Private key not found'
+    }
+    return createAccount(password, this.COSTNUM , private_key);
 };
 
 /*
