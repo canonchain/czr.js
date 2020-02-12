@@ -194,6 +194,27 @@ Accounts.prototype.createByPrivate = function (password , private_key) {
     return createAccount(password, this.COSTNUM , private_key);
 };
 
+Accounts.prototype.getAccountByPrivate = function (private_key) {
+    if(!private_key){
+        return 'Private key not found'
+    }
+    let privateKey = Buffer.from(private_key.toUpperCase(), "hex")
+    let promise = new Promise(function (resolve, reject) {
+        try {
+            // 生成公钥
+            edPro.ready(function () {
+                const keypair = edPro.createKeyPair(privateKey)
+                let publicKey = Buffer.from(keypair.publicKey.buffer);
+                resolve(encodeAccount(publicKey))
+            })
+        } catch (e) {
+            reject(e)
+        }
+    });
+    return promise;
+
+};
+
 /*
 * 验证keystore文件
 * parame: keystore pwd
