@@ -385,7 +385,7 @@ Contract.prototype._getRpc = async function () {
                 // 返回
                 if (sendResult.code !== 0) {
                     _this._parent._runCallback(args.callback, new Error("Send Error"))
-                    reject(sendResult);
+                    return reject(sendResult);
                 }
                 _this._parent._runCallback(args.callback, null, sendResult.hash);
 
@@ -397,7 +397,7 @@ Contract.prototype._getRpc = async function () {
                     //上面已做过判断，必定会有hash
                     searchRes = await request.getBlockState(sendResult.hash);
                     if (searchRes.code !== 0) {
-                        reject(searchRes);
+                        return reject(searchRes);
                     }
                     //判断是否稳定
                     if (searchRes.block_state.is_stable === 0) {
@@ -408,7 +408,7 @@ Contract.prototype._getRpc = async function () {
                     //稳定开始获取block
                     let blockResInfo = await request.getBlock(sendResult.hash);
                     if (blockResInfo.code !== 0) {
-                        reject(blockResInfo);
+                        return reject(blockResInfo);
                     }
                     if (searchRes.block_state.is_stable === 1) {
                         let searchResBloState = searchRes.block_state;
