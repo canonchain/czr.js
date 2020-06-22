@@ -3,6 +3,7 @@ let czr = new Czr();
 const czrVal = 2;
 //toCan
 console.log(`${czrVal}CZR toCan 结果  => ${czr.utils.toCan(czrVal, "czr")}`);
+console.log(`${czrVal}CZR toCanToken 结果  => ${czr.utils.toCanToken(czrVal, 1000000000000000000)}`);
 
 //fromCan
 console.log(`${czrVal}CZR fromCan 结果  => ${czr.utils.fromCan(czrVal)}`);

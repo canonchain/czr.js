@@ -38,7 +38,7 @@ let abi = require("../abi/")
  * @param {String} account
  * @param {Object} options
  */
-var Contract = function Contract(jsonInterface, account, options) {
+var Contract = function Contract (jsonInterface, account, options) {
     var _this = this,
         args = Array.prototype.slice.call(arguments);
     //判断原型是不是在Contract
@@ -277,7 +277,13 @@ Contract.prototype._encodeMethodABI = function () {
     }).map(function (inputs) {
         // console.log("___encodeParameters",inputs, args)
         // console.log("___encodeParameters",abi.encodeParameters(inputs, args).replace('0x', ''))
-        return abi.encodeParameters(inputs, args).replace('0x', '');
+        // return abi.encodeParameters(inputs, args).replace('0x', '');
+        // old
+        // return abi.encodeParameters(inputs, args).replace('0x', '');
+        return utils.encode.parse(
+            { funArgs: args },
+            { inputs: inputs }
+        ).replace('0x', '');
     })[0] || '';//方法和参数转成16进制
     // return constructor
     if (methodSignature === 'constructor') {

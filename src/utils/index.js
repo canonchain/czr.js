@@ -29,7 +29,7 @@ let encodeAccount = function (pub) {
 }
 let decodeAccount = function (czr_address) {
     //零地址，特殊处理
-    if(czr_address ==='czr_zero_address'){
+    if (czr_address === 'czr_zero_address') {
         return '0000000000000000000000000000000000000000000000000000000000000000'
     }
     let res = czr_address.split("_")
@@ -82,6 +82,12 @@ let toCan = function (number, unit) {
     let returnValue = toBigNumber(number).times(getValueOfUnit(unit));
     return isBigNumber(number) ? returnValue : returnValue.toString(10);
 };
+
+let toCanToken = function (number, precision) {
+    let returnValue = toBigNumber(number).times(precision);
+    return isBigNumber(number) ? returnValue : returnValue.toString(10);
+};
+
 
 // 判断账户是否合法
 let isAccount = function (act) {
@@ -239,6 +245,7 @@ module.exports = {
     fromCan: fromCan,
     fromCanToken: fromCanToken,
     toCan: toCan,
+    toCanToken: toCanToken,
     judge: judge,
     sha3: sha3
 };
